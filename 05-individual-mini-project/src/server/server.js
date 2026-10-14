@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 app.get('/health', (req, res) => {
     res.status(200).json({
         status: 'UP',
-        service: 'Mini Project API Server',
+        service: 'Smart Card Identity & Digital Wallet API',
         timestamp: new Date().toISOString()
     });
 });
@@ -38,14 +38,16 @@ app.use('/api', apiRoutes);
 // Root greeting
 app.get('/', (req, res) => {
     res.json({
-        project: 'Individual Mini Project - Full Stack Web API',
+        project: 'Smart Card Identity & Digital Wallet System',
         endpoints: {
             health: '/health',
-            tasks: '/api/tasks'
+            cards: '/api/cards',
+            transactions: '/api/transactions',
+            stats: '/api/stats'
         }
     });
 });
 
 app.listen(PORT, () => {
-    console.log(`Mini Project Server is running on port ${PORT}`);
+    console.log(`Smart Card Backend API Server is running on port ${PORT}`);
 });

@@ -172,11 +172,11 @@ Internal lab assessments with question papers, execution screenshots, and practi
 - **Internal Assessment 02**: Full-stack MERN issue tracker / ticket system.
 
 ### `05-individual-mini-project`
-Production-ready full-stack MERN web application with end-to-end cloud deployment configurations:
-- **React Frontend**: Single-page application ready to deploy to Vercel with `vercel.json`.
-- **Express Backend**: REST API server ready to deploy to Render with `render.yaml`.
-- **Database**: MongoDB Atlas connectivity with Mongoose ODM models.
-- **Deployment Guide**: Comprehensive step-by-step instructions for deploying database, API, and frontend to the cloud.
+**Smart Card Identity & Digital Wallet System**:
+- **Virtual Smart Card UI**: Realistic 3D contactless card interface with EMV chip, NFC UID, and live balance display.
+- **POS & Turnstile Simulator**: Tap-to-pay cafeteria purchases, bus transit, and turnstile access control with Web Audio tone feedback.
+- **Digital Wallet Management**: Wallet top-ups, 1-click card blocking for lost cards, and real-time transaction auditing ledger.
+- **Cloud Deployment**: Production configurations for Vercel (client), Render (server), and MongoDB Atlas (cloud database).
 
 ---
 

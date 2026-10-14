@@ -1,16 +1,19 @@
-# Individual Mini Project: Full-Stack Web Application 🚀
+# Individual Mini Project: Smart Card Identity & Digital Wallet System 💳
 
-> An end-to-end Full-Stack MERN (MongoDB, Express.js, React.js, Node.js) web application built for the individual mini-project submission, ready for cloud deployment.
+> A Full-Stack MERN (MongoDB, Express.js, React.js, Node.js) web application simulating a contactless Smart Card (RFID/NFC) campus identity, turnstile gate access, and digital wallet payment ecosystem.
 
 ---
 
-## 🌟 Project Overview
+## 🌟 System Overview
 
-This mini project demonstrates a complete real-world full-stack architecture featuring:
-- **Frontend**: Responsive Single Page Application (SPA) built with React.
-- **Backend API**: RESTful Express.js server with modular controllers and middleware.
-- **Database**: MongoDB with Mongoose ORM for data persistence and schema validation.
-- **Deployment**: Production-ready deployment configurations for **Vercel** (Frontend) and **Render** (Backend).
+The **Smart Card Identity & Digital Wallet System** centralizes campus operations into an interactive digital smart card:
+- **Virtual Smart Card**: Realistic 3D card layout displaying EMV chip, contactless antenna waves, unique NFC/RFID UID, masked card numbers, cardholder details, and real-time wallet balances.
+- **Access Control & POS Terminals**: Simulates tapping the card at diverse campus terminals (Cafeteria meal payments, Library turnstiles, Campus transit shuttles, and Computing labs).
+- **Audio & Visual Tap Feedback**: Integrated with Web Audio API to reproduce authentic POS tone chimes upon successful authorization or rejection buzzers when a card is blocked or has insufficient balance.
+- **Card Security & Lifecycle**: 1-click lost/stolen card locking to immediately prevent unauthorized transactions across all campus terminals.
+- **Digital Wallet Recharge**: Instant top-up options (+₹100, +₹500, +₹1,000) or custom UPI payment simulations.
+- **Live Transaction Ledger**: Real-time auditing of credits, payment debits, and access gate turnstile entries.
+- **Card Issuance Portal**: Form to issue new smart cards with unique RFID/NFC UIDs, departments, and initial balances.
 
 ---
 
@@ -19,121 +22,116 @@ This mini project demonstrates a complete real-world full-stack architecture fea
 ```
 05-individual-mini-project/
 │
-├── README.md
-├── Mini_Project_Report.pdf
+├── README.md                      # Complete Project & Deployment Guide
+├── Mini_Project_Report.pdf        # Academic Report & Project Synopsis
 │
 ├── screenshots/
-│   ├── application-dashboard.png
-│   └── api-deployment-proof.png
+│   ├── application-dashboard.png  # UI Dashboard & Virtual Smart Card proof
+│   └── api-deployment-proof.png   # Backend API execution & deployment proof
 │
 └── src/
-    ├── client/               # React Frontend SPA
+    ├── client/                    # React Frontend SPA (Vercel Ready)
     │   ├── index.html
     │   ├── package.json
-    │   ├── vercel.json       # Deployment configuration for Vercel
+    │   ├── vercel.json            # Vercel SPA routing rewrite rules
     │   └── src/
-    │       ├── App.jsx
-    │       ├── App.css
+    │       ├── App.jsx            # Interactive Smart Card & POS Terminal UI
+    │       ├── App.css            # Dark mode glassmorphic styling
     │       └── main.jsx
     │
-    └── server/               # Express.js REST API Backend
+    └── server/                    # Express.js REST API Backend (Render Ready)
         ├── package.json
-        ├── server.js
-        ├── .env.example      # Environment variables template
-        ├── render.yaml       # Deployment configuration for Render
+        ├── server.js              # REST server with health monitoring
+        ├── .env.example           # Environment template
+        ├── render.yaml            # Render Blueprint deployment config
         ├── config/
-        │   └── db.js
+        │   └── db.js              # MongoDB Atlas connection utility
         ├── models/
-        │   └── Task.js
+        │   ├── SmartCard.js       # Cardholder, UID, Balance & Status schema
+        │   └── Transaction.js     # Payments, Recharges & Access logs schema
         └── routes/
-            └── api.js
+            └── api.js             # Card management, Tap-to-Pay & Ledger routes
 ```
 
 ---
 
-## 🛠 Tech Stack
+## 📡 REST API Specifications
 
-| Layer | Technology |
-|---|---|
-| **Frontend** | React 18, HTML5, CSS3 Modern Flexbox/Grid |
-| **Backend** | Node.js, Express.js, CORS, Dotenv |
-| **Database** | MongoDB Atlas (Cloud), Mongoose ODM |
-| **Deployment** | Vercel (Client) + Render (Server) |
-| **Testing** | Postman, Chrome DevTools |
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/cards` | Retrieve all issued smart cards |
+| `GET` | `/api/cards/:id` | Fetch specific card profile & current balance |
+| `POST` | `/api/cards` | Issue a new smart card with NFC UID & initial balance |
+| `PUT` | `/api/cards/:id/status` | Toggle card security status (`Active` ↔ `Blocked`) |
+| `POST` | `/api/cards/:id/recharge` | Top up digital wallet funds |
+| `POST` | `/api/cards/:id/tap` | Simulate POS payment or Gate access verification |
+| `GET` | `/api/transactions` | Fetch latest transaction & turnstile access audit logs |
+| `GET` | `/health` | Server health check endpoint |
 
 ---
 
 ## ⚙️ Local Development Setup
 
-### 1. Prerequisites
-- [Node.js](https://nodejs.org/) (v16.x or newer)
-- [MongoDB](https://www.mongodb.com/) (Local Community Server or free MongoDB Atlas cluster)
-
-### 2. Backend Setup
+### 1. Backend Setup
 ```bash
-cd src/server
+cd 05-individual-mini-project/src/server
 npm install
 cp .env.example .env
-# Edit .env with your MongoDB URI and desired PORT
+# Edit .env (Optional: set MONGO_URI, default falls back to local memory store)
 npm start
 ```
-The server will start on `http://localhost:5000`.
+The backend server runs on `http://localhost:5000`.
 
-### 3. Frontend Setup
+### 2. Frontend Setup
 ```bash
-cd src/client
+cd 05-individual-mini-project/src/client
 npm install
 npm start
 ```
-The client will start on `http://localhost:3000` (or `http://localhost:5173`).
+The React frontend starts on `http://localhost:3000`.
 
 ---
 
 ## 🌐 Cloud Deployment Guide
 
-### A. Database: MongoDB Atlas (Free Cloud Cluster)
-1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) and create a free Shared Cluster.
-2. Under **Network Access**, add IP Address `0.0.0.0/0` (allow access from anywhere for cloud hosting).
-3. Under **Database Access**, create a database user and password.
-4. Click **Connect** > **Drivers** and copy your connection string:
+### A. Database: MongoDB Atlas
+1. Create a free cluster on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+2. Set Network Access to `0.0.0.0/0` (allow connections from anywhere).
+3. Copy your URI connection string:
    ```
-   mongodb+srv://<username>:<password>@cluster0.mongodb.net/miniproject?retryWrites=true&w=majority
+   mongodb+srv://<username>:<password>@cluster.mongodb.net/smartcard_db?retryWrites=true&w=majority
    ```
 
----
-
-### B. Backend API Deployment: Render
-1. Push your repository to GitHub.
-2. Log in to [Render](https://render.com/) and click **New +** > **Web Service**.
-3. Connect your GitHub repository:
+### B. Backend: Render
+1. Push this repository to your GitHub account.
+2. In [Render Dashboard](https://dashboard.render.com/), select **New +** > **Web Service**.
+3. Select your repository:
    - **Root Directory**: `05-individual-mini-project/src/server`
    - **Environment**: `Node`
    - **Build Command**: `npm install`
    - **Start Command**: `node server.js`
-4. In the **Environment Variables** section, add:
-   - `PORT`: `5000`
-   - `MONGO_URI`: `your_mongodb_atlas_connection_string`
-   - `CLIENT_URL`: `https://your-frontend.vercel.app` (or `*`)
-5. Click **Create Web Service**. Render will deploy your API and give you a public URL (e.g. `https://my-mini-project-api.onrender.com`).
-
----
-
-### C. Frontend Deployment: Vercel
-1. Log in to [Vercel](https://vercel.com/) and click **Add New...** > **Project**.
-2. Select your repository.
-3. In **Root Directory**, click edit and select:
-   `05-individual-mini-project/src/client`
 4. In **Environment Variables**, add:
-   - `REACT_APP_API_URL`: `https://my-mini-project-api.onrender.com/api` (your deployed Render URL)
-5. Click **Deploy**. Vercel will build and assign you a global HTTPS domain.
+   - `PORT`: `5000`
+   - `MONGO_URI`: *Your MongoDB Atlas connection URI*
+   - `CLIENT_URL`: `https://your-frontend.vercel.app` (or `*`)
+5. Click **Deploy Web Service**.
+
+### C. Frontend: Vercel
+1. In [Vercel Dashboard](https://vercel.com/), select **Add New...** > **Project**.
+2. Select your repository.
+3. Edit the **Root Directory** to point to:
+   `05-individual-mini-project/src/client`
+4. Under **Environment Variables**, configure:
+   - `REACT_APP_API_URL`: `https://your-backend-api.onrender.com/api`
+5. Click **Deploy**.
 
 ---
 
 ## 🔗 Live Deployment URLs
 
-- **Live Application**: `https://your-mini-project.vercel.app` *(update with your live link)*
-- **Deployed Backend API**: `https://your-mini-project-api.onrender.com` *(update with your live link)*
-- **API Health Check**: `https://your-mini-project-api.onrender.com/health`
+- **Live Smart Card App**: `https://your-smart-card.vercel.app` *(update with your link)*
+- **Deployed Backend API**: `https://your-smart-card-api.onrender.com` *(update with your link)*
+- **API Health Check**: `https://your-smart-card-api.onrender.com/health`
 
 ---
 

@@ -107,18 +107,28 @@ full-stack-web-development/
 │       │   └── postman-tests.png
 │       └── src/
 │
-└── 04-assessments/
-    ├── internal-assessment-01/
-    │   ├── QuestionPaper_IA1.pdf
-    │   ├── screenshots/
-    │   │   └── exam-output-proof.png
-    │   └── src/
-    │
-    └── internal-assessment-02/
-        ├── QuestionPaper_IA2.pdf
-        ├── screenshots/
-        │   └── fullstack-app-demo.png
-        └── src/
+├── 04-assessments/
+│   ├── internal-assessment-01/
+│   │   ├── QuestionPaper_IA1.pdf
+│   │   ├── screenshots/
+│   │   │   └── exam-output-proof.png
+│   │   └── src/
+│   │
+│   └── internal-assessment-02/
+│       ├── QuestionPaper_IA2.pdf
+│       ├── screenshots/
+│       │   └── fullstack-app-demo.png
+│       └── src/
+│
+└── 05-individual-mini-project/
+    ├── README.md
+    ├── Mini_Project_Report.pdf
+    ├── screenshots/
+    │   ├── application-dashboard.png
+    │   └── api-deployment-proof.png
+    └── src/
+        ├── client/         # React Frontend (Vercel Ready)
+        └── server/         # Express REST API (Render Ready)
 ```
 
 ---
@@ -128,6 +138,7 @@ full-stack-web-development/
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+), React.js
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB, Mongoose ODM
+- **Deployment**: Vercel (Client), Render (Server), MongoDB Atlas (Cloud DB)
 - **Testing & Tooling**: Postman, Git, GitHub, Modern Web DevTools
 
 ---
@@ -159,6 +170,13 @@ Major term assignments with problem statements, proof screenshots, and complete 
 Internal lab assessments with question papers, execution screenshots, and practical implementations:
 - **Internal Assessment 01**: Dynamic DOM filtering application.
 - **Internal Assessment 02**: Full-stack MERN issue tracker / ticket system.
+
+### `05-individual-mini-project`
+Production-ready full-stack MERN web application with end-to-end cloud deployment configurations:
+- **React Frontend**: Single-page application ready to deploy to Vercel with `vercel.json`.
+- **Express Backend**: REST API server ready to deploy to Render with `render.yaml`.
+- **Database**: MongoDB Atlas connectivity with Mongoose ODM models.
+- **Deployment Guide**: Comprehensive step-by-step instructions for deploying database, API, and frontend to the cloud.
 
 ---
 

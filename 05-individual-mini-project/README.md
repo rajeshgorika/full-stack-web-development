@@ -1,19 +1,19 @@
-# Individual Mini Project: Smart Card Identity & Digital Wallet System 💳
+# Individual Mini Project: Smart Traffic Signal Optimisation 🚦
 
-> A Full-Stack MERN (MongoDB, Express.js, React.js, Node.js) web application simulating a contactless Smart Card (RFID/NFC) campus identity, turnstile gate access, and digital wallet payment ecosystem.
+> An Adaptive Density-Weighted Traffic Signal Control System built using **HTML5, CSS3, React.js**, and an Express backend backed by a **Sample Dummy Database (JSON)**.
 
 ---
 
-## 🌟 System Overview
+## 🌟 Problem Statement & Overview
 
-The **Smart Card Identity & Digital Wallet System** centralizes campus operations into an interactive digital smart card:
-- **Virtual Smart Card**: Realistic 3D card layout displaying EMV chip, contactless antenna waves, unique NFC/RFID UID, masked card numbers, cardholder details, and real-time wallet balances.
-- **Access Control & POS Terminals**: Simulates tapping the card at diverse campus terminals (Cafeteria meal payments, Library turnstiles, Campus transit shuttles, and Computing labs).
-- **Audio & Visual Tap Feedback**: Integrated with Web Audio API to reproduce authentic POS tone chimes upon successful authorization or rejection buzzers when a card is blocked or has insufficient balance.
-- **Card Security & Lifecycle**: 1-click lost/stolen card locking to immediately prevent unauthorized transactions across all campus terminals.
-- **Digital Wallet Recharge**: Instant top-up options (+₹100, +₹500, +₹1,000) or custom UPI payment simulations.
-- **Live Transaction Ledger**: Real-time auditing of credits, payment debits, and access gate turnstile entries.
-- **Card Issuance Portal**: Form to issue new smart cards with unique RFID/NFC UIDs, departments, and initial balances.
+Traditional traffic lights operate on rigid, static timers (e.g. 30 seconds per direction regardless of whether 2 cars or 50 cars are waiting). This causes unnecessary bottlenecks, increased idle emissions, wasted fuel, and delays for emergency responders (ambulances/fire engines).
+
+The **Smart Traffic Signal Optimisation** system solves this by:
+1. **Real-Time Density Monitoring**: Continuously evaluates vehicle count and queue lengths on North, South, East, and West lanes.
+2. **Adaptive Density-Weighted Scheduling (ADWS)**: Dynamically calculates green light duration ($15\text{s}$ to $60\text{s}$) proportional to the real-time queue density.
+3. **Emergency Green Corridor**: Provides instant 1-click override for emergency vehicles (ambulances, fire engines), automatically halting conflicting lanes with Red signals and clearing the transit path.
+4. **Interactive 4-Way Intersection Simulator**: Visual crossroad canvas with animated glowing signals (🔴 🟡 🟢), countdown timers, and vehicle queue previews.
+5. **Sample Dummy Database (JSON)**: Backed by `trafficDB.json` for lightweight persistence, inspection, and state restoration without requiring complex database engines.
 
 ---
 
@@ -22,12 +22,12 @@ The **Smart Card Identity & Digital Wallet System** centralizes campus operation
 ```
 05-individual-mini-project/
 │
-├── README.md                      # Complete Project & Deployment Guide
+├── README.md                      # Comprehensive Project & Deployment Guide
 ├── Mini_Project_Report.pdf        # Academic Report & Project Synopsis
 │
 ├── screenshots/
-│   ├── application-dashboard.png  # UI Dashboard & Virtual Smart Card proof
-│   └── api-deployment-proof.png   # Backend API execution & deployment proof
+│   ├── application-dashboard.png  # UI Dashboard & 4-Way Intersection Simulator
+│   └── api-deployment-proof.png   # Backend API execution & JSON DB proof
 │
 └── src/
     ├── client/                    # React Frontend SPA (Vercel Ready)
@@ -35,23 +35,36 @@ The **Smart Card Identity & Digital Wallet System** centralizes campus operation
     │   ├── package.json
     │   ├── vercel.json            # Vercel SPA routing rewrite rules
     │   └── src/
-    │       ├── App.jsx            # Interactive Smart Card & POS Terminal UI
-    │       ├── App.css            # Dark mode glassmorphic styling
-    │       └── main.jsx
+    │       ├── App.jsx            # 4-Way Visualizer, Adaptive Timer, Emergency UI
+    │       ├── App.css            # Dark mode crossroad & dashboard styling
+    │       ├── main.jsx
+    │       └── data/
+    │           └── trafficDB.json # Sample Dummy Database (Client bundled)
     │
     └── server/                    # Express.js REST API Backend (Render Ready)
         ├── package.json
         ├── server.js              # REST server with health monitoring
         ├── .env.example           # Environment template
         ├── render.yaml            # Render Blueprint deployment config
-        ├── config/
-        │   └── db.js              # MongoDB Atlas connection utility
-        ├── models/
-        │   ├── SmartCard.js       # Cardholder, UID, Balance & Status schema
-        │   └── Transaction.js     # Payments, Recharges & Access logs schema
+        ├── data/
+        │   └── trafficDB.json     # Sample Dummy Database (JSON File Store)
         └── routes/
-            └── api.js             # Card management, Tap-to-Pay & Ledger routes
+            └── api.js             # Traffic control & optimization API endpoints
 ```
+
+---
+
+## 🧠 Adaptive Timing Algorithm
+
+Green duration ($T_{\text{green}}$) for lane $L$ is dynamically computed as:
+
+$$T_{\text{green}} = \min\left(T_{\max}, \max\left(T_{\min}, T_{\min} + \left(\frac{V_L}{C_L}\right) \times (T_{\max} - T_{\min})\right)\right)$$
+
+Where:
+- $T_{\min} = 15\text{ seconds}$ (Minimum clearance window)
+- $T_{\max} = 60\text{ seconds}$ (Maximum green threshold)
+- $V_L = \text{Current vehicle count on lane } L$
+- $C_L = \text{Lane design capacity (45 vehicles)}$
 
 ---
 
@@ -59,14 +72,53 @@ The **Smart Card Identity & Digital Wallet System** centralizes campus operation
 
 | Method | Endpoint | Description |
 |---|---|---|
-| `GET` | `/api/cards` | Retrieve all issued smart cards |
-| `GET` | `/api/cards/:id` | Fetch specific card profile & current balance |
-| `POST` | `/api/cards` | Issue a new smart card with NFC UID & initial balance |
-| `PUT` | `/api/cards/:id/status` | Toggle card security status (`Active` ↔ `Blocked`) |
-| `POST` | `/api/cards/:id/recharge` | Top up digital wallet funds |
-| `POST` | `/api/cards/:id/tap` | Simulate POS payment or Gate access verification |
-| `GET` | `/api/transactions` | Fetch latest transaction & turnstile access audit logs |
+| `GET` | `/api/traffic/junctions` | Retrieve all intersections from the dummy JSON DB |
+| `GET` | `/api/traffic/junctions/:id` | Get specific junction real-time status and lane metrics |
+| `PUT` | `/api/traffic/junctions/:id/density` | Update a lane's vehicle count and recalculate green timing |
+| `POST` | `/api/traffic/junctions/:id/emergency` | Activate emergency green corridor (ambulance/fire engine) |
+| `PUT` | `/api/traffic/junctions/:id/mode` | Switch control mode (`Adaptive`, `Fixed`, or `Manual`) |
+| `POST` | `/api/traffic/junctions/:id/next-phase` | Advance signal phase to next highest-priority lane |
+| `GET` | `/api/traffic/logs` | Fetch real-time system audit logs |
 | `GET` | `/health` | Server health check endpoint |
+
+---
+
+## 💾 Sample Dummy Database Schema (`trafficDB.json`)
+
+```json
+{
+  "system": {
+    "title": "Smart Traffic Signal Optimisation System",
+    "version": "1.0.0",
+    "algorithm": "Adaptive Density-Weighted Scheduling (ADWS)"
+  },
+  "junctions": [
+    {
+      "id": "J-101",
+      "name": "Central Tech Square Junction",
+      "mode": "Adaptive",
+      "activeLane": "North",
+      "timerRemaining": 24,
+      "lanes": {
+        "North": {
+          "vehicleCount": 32,
+          "capacity": 45,
+          "congestion": "High",
+          "signal": "Green",
+          "allocatedGreen": 35,
+          "emergencyVehicle": false
+        }
+      },
+      "metrics": {
+        "avgWaitTimeSec": 38,
+        "throughputVehiclesPerMin": 64,
+        "co2SavedKg": 142.8
+      }
+    }
+  ],
+  "logs": []
+}
+```
 
 ---
 
@@ -76,8 +128,6 @@ The **Smart Card Identity & Digital Wallet System** centralizes campus operation
 ```bash
 cd 05-individual-mini-project/src/server
 npm install
-cp .env.example .env
-# Edit .env (Optional: set MONGO_URI, default falls back to local memory store)
 npm start
 ```
 The backend server runs on `http://localhost:5000`.
@@ -94,44 +144,26 @@ The React frontend starts on `http://localhost:3000`.
 
 ## 🌐 Cloud Deployment Guide
 
-### A. Database: MongoDB Atlas
-1. Create a free cluster on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
-2. Set Network Access to `0.0.0.0/0` (allow connections from anywhere).
-3. Copy your URI connection string:
-   ```
-   mongodb+srv://<username>:<password>@cluster.mongodb.net/smartcard_db?retryWrites=true&w=majority
-   ```
-
-### B. Backend: Render
-1. Push this repository to your GitHub account.
-2. In [Render Dashboard](https://dashboard.render.com/), select **New +** > **Web Service**.
+### A. Backend: Render
+1. Push this repository to GitHub.
+2. In [Render Dashboard](https://dashboard.render.com/), click **New +** > **Web Service**.
 3. Select your repository:
    - **Root Directory**: `05-individual-mini-project/src/server`
    - **Environment**: `Node`
    - **Build Command**: `npm install`
    - **Start Command**: `node server.js`
-4. In **Environment Variables**, add:
+4. Set Environment Variable:
    - `PORT`: `5000`
-   - `MONGO_URI`: *Your MongoDB Atlas connection URI*
-   - `CLIENT_URL`: `https://your-frontend.vercel.app` (or `*`)
 5. Click **Deploy Web Service**.
 
-### C. Frontend: Vercel
-1. In [Vercel Dashboard](https://vercel.com/), select **Add New...** > **Project**.
+### B. Frontend: Vercel
+1. In [Vercel Dashboard](https://vercel.com/), click **Add New...** > **Project**.
 2. Select your repository.
-3. Edit the **Root Directory** to point to:
+3. Edit **Root Directory** to point to:
    `05-individual-mini-project/src/client`
-4. Under **Environment Variables**, configure:
-   - `REACT_APP_API_URL`: `https://your-backend-api.onrender.com/api`
+4. Under **Environment Variables**, set:
+   - `REACT_APP_API_URL`: `https://your-traffic-api.onrender.com/api/traffic`
 5. Click **Deploy**.
-
----
-
-## 🔗 Live Deployment URLs
-
-- **Live Smart Card App**: `https://your-smart-card.vercel.app` *(update with your link)*
-- **Deployed Backend API**: `https://your-smart-card-api.onrender.com` *(update with your link)*
-- **API Health Check**: `https://your-smart-card-api.onrender.com/health`
 
 ---
 

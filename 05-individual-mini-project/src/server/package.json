@@ -1,7 +1,7 @@
 {
   "name": "mini-project-server",
   "version": "1.0.0",
-  "description": "Full-Stack Mini Project Backend API",
+  "description": "Smart Traffic Signal Optimisation REST API with JSON DB",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

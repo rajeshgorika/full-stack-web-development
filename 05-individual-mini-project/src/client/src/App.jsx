@@ -1,499 +1,676 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import initialTrafficDB from './data/trafficDB.json';
 import './App.css';
 
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/traffic';
 
-// Web Audio API tone generator for realistic card tap feedback
-const playTone = (isSuccess) => {
+// Audio alert for emergency corridor using Web Audio API
+const playEmergencyTone = () => {
   try {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-
     osc.connect(gain);
     gain.connect(audioCtx.destination);
-
-    if (isSuccess) {
-      // Pleasant dual chime
-      osc.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
-      osc.frequency.setValueAtTime(1174.66, audioCtx.currentTime + 0.08); // D6
-      gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.25);
-    } else {
-      // Rejection buzz
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(180, audioCtx.currentTime);
-      gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.35);
-    }
-  } catch (e) {
-    // AudioContext blocked or unsupported, fail silently
-  }
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+    osc.frequency.linearRampToValueAtTime(900, audioCtx.currentTime + 0.2);
+    osc.frequency.linearRampToValueAtTime(600, audioCtx.currentTime + 0.4);
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.45);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.45);
+  } catch (e) {}
 };
 
 function App() {
-  const [cards, setCards] = useState([]);
-  const [activeCard, setActiveCard] = useState(null);
-  const [transactions, setTransactions] = useState([]);
-  const [feedback, setFeedback] = useState(null);
-  const [rechargeAmount, setRechargeAmount] = useState('');
-  const [showIssueModal, setShowIssueModal] = useState(false);
-  const [newCardForm, setNewCardForm] = useState({
-    holderName: '',
-    rollNumber: '',
-    email: '',
-    department: 'Computer Science & Engineering',
-    cardType: 'Student',
-    initialBalance: '500'
-  });
+  const [db, setDb] = useState(initialTrafficDB);
+  const [selectedJunctionId, setSelectedJunctionId] = useState('J-101');
+  const [isSimulating, setIsSimulating] = useState(true);
+  const [isYellowPhase, setIsYellowPhase] = useState(false);
+  const [showJsonDbModal, setShowJsonDbModal] = useState(false);
 
-  // Fetch initial cards and ledger
-  const loadData = async () => {
-    try {
-      const [cardsRes, txRes] = await Promise.all([
-        fetch(`${API_BASE}/cards`),
-        fetch(`${API_BASE}/transactions`)
-      ]);
-      const cardsJson = await cardsRes.json();
-      const txJson = await txRes.json();
+  const currentJunction = db.junctions.find(j => j.id === selectedJunctionId) || db.junctions[0];
 
-      if (cardsJson.success && cardsJson.data.length > 0) {
-        setCards(cardsJson.data);
-        setActiveCard(prev => {
-          if (!prev) return cardsJson.data[0];
-          const found = cardsJson.data.find(c => c._id === prev._id);
-          return found || cardsJson.data[0];
-        });
-      }
-
-      if (txJson.success) {
-        setTransactions(txJson.data);
-      }
-    } catch (err) {
-      console.warn('API error, relying on internal state', err);
-    }
-  };
-
+  // Fetch from backend API on load, fallback to initialTrafficDB
   useEffect(() => {
-    loadData();
+    fetch(`${API_BASE}/junctions`)
+      .then(res => res.json())
+      .then(resData => {
+        if (resData.success && resData.data) {
+          setDb(prev => ({ ...prev, junctions: resData.data }));
+        }
+      })
+      .catch(() => {
+        console.log('Backend offline, using client-bundled JSON DB');
+      });
   }, []);
 
-  // Handle Tap & Pay / Turnstile Gate simulation
-  const handleTerminalTap = async (terminal) => {
-    if (!activeCard) return;
+  // Adaptive timing calculation function
+  const calculateGreenTime = (vehicleCount, capacity = 45) => {
+    const minGreen = 15;
+    const maxGreen = 60;
+    const ratio = Math.min(vehicleCount / capacity, 1.2);
+    return Math.round(minGreen + ratio * (maxGreen - minGreen));
+  };
 
-    try {
-      const res = await fetch(`${API_BASE}/cards/${activeCard._id}/tap`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: terminal.cost,
-          location: terminal.name,
-          type: terminal.type
-        })
-      });
+  const getCongestion = (vehicleCount, capacity = 45) => {
+    const ratio = vehicleCount / capacity;
+    if (ratio < 0.35) return 'Low';
+    if (ratio < 0.70) return 'Medium';
+    if (ratio < 0.95) return 'High';
+    return 'Severe';
+  };
 
-      const data = await res.json();
-      if (res.ok && data.success) {
-        playTone(true);
-        setFeedback({
-          type: 'success',
-          message: data.message
+  // Helper to switch phase to next lane
+  const advanceToNextLane = (customLane = null) => {
+    setDb(prevDb => {
+      const updatedJunctions = prevDb.junctions.map(j => {
+        if (j.id !== currentJunction.id) return j;
+
+        const laneKeys = ['North', 'East', 'South', 'West'];
+        let nextLane = customLane;
+
+        if (!nextLane) {
+          if (j.mode === 'Adaptive') {
+            // Adaptive: pick non-active lane with highest vehicle count
+            const others = laneKeys.filter(l => l !== j.activeLane);
+            others.sort((a, b) => j.lanes[b].vehicleCount - j.lanes[a].vehicleCount);
+            nextLane = others[0] || laneKeys[0];
+          } else {
+            // Fixed round-robin
+            const curIdx = laneKeys.indexOf(j.activeLane);
+            nextLane = laneKeys[(curIdx + 1) % laneKeys.length];
+          }
+        }
+
+        const newLanes = { ...j.lanes };
+        laneKeys.forEach(l => {
+          if (l === nextLane) {
+            newLanes[l] = {
+              ...newLanes[l],
+              signal: 'Green',
+              allocatedGreen: j.mode === 'Fixed' ? 25 : calculateGreenTime(newLanes[l].vehicleCount)
+            };
+          } else {
+            newLanes[l] = {
+              ...newLanes[l],
+              signal: 'Red',
+              emergencyVehicle: false
+            };
+          }
         });
-        loadData();
-      } else {
-        playTone(false);
-        setFeedback({
-          type: 'error',
-          message: data.error || 'Transaction Declined'
+
+        // Vehicles depart from green lane
+        const departed = Math.min(newLanes[nextLane].vehicleCount, 6);
+        newLanes[nextLane].vehicleCount = Math.max(0, newLanes[nextLane].vehicleCount - departed);
+        newLanes[nextLane].congestion = getCongestion(newLanes[nextLane].vehicleCount, newLanes[nextLane].capacity);
+
+        const newMetrics = {
+          ...j.metrics,
+          totalCyclesCompleted: (j.metrics.totalCyclesCompleted || 0) + 1,
+          throughputVehiclesPerMin: Math.min(95, j.metrics.throughputVehiclesPerMin + 1),
+          co2SavedKg: parseFloat((j.metrics.co2SavedKg + 0.4).toFixed(1))
+        };
+
+        return {
+          ...j,
+          activeLane: nextLane,
+          timerRemaining: newLanes[nextLane].allocatedGreen,
+          lanes: newLanes,
+          metrics: newMetrics
+        };
+      });
+
+      const newLog = {
+        id: `LOG-${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        junctionId: currentJunction.id,
+        event: 'Signal Phase Transition',
+        detail: `Green light allocated to ${currentJunction.activeLane} lane.`
+      };
+
+      return {
+        ...prevDb,
+        junctions: updatedJunctions,
+        logs: [newLog, ...prevDb.logs.slice(0, 30)]
+      };
+    });
+    setIsYellowPhase(false);
+  };
+
+  // Timer simulation loop
+  useEffect(() => {
+    if (!isSimulating) return;
+
+    const interval = setInterval(() => {
+      setDb(prevDb => {
+        const j = prevDb.junctions.find(item => item.id === selectedJunctionId);
+        if (!j) return prevDb;
+
+        const currentTimer = j.timerRemaining;
+
+        // Enter yellow phase during last 3 seconds
+        if (currentTimer <= 4 && currentTimer > 1 && !isYellowPhase) {
+          setIsYellowPhase(true);
+        }
+
+        if (currentTimer <= 1) {
+          // Timer expired, advance to next phase
+          advanceToNextLane();
+          return prevDb;
+        }
+
+        // Decrement timer
+        const updatedJunctions = prevDb.junctions.map(item => {
+          if (item.id === selectedJunctionId) {
+            return {
+              ...item,
+              timerRemaining: item.timerRemaining - 1
+            };
+          }
+          return item;
         });
-        loadData();
-      }
-    } catch (e) {
-      playTone(false);
-      setFeedback({ type: 'error', message: 'Terminal connection error' });
-    }
+
+        return {
+          ...prevDb,
+          junctions: updatedJunctions
+        };
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isSimulating, selectedJunctionId, isYellowPhase]);
+
+  // Adjust vehicle count on a lane
+  const handleUpdateDensity = (laneKey, delta) => {
+    setDb(prevDb => {
+      const updatedJunctions = prevDb.junctions.map(j => {
+        if (j.id !== currentJunction.id) return j;
+        const currentCount = j.lanes[laneKey].vehicleCount;
+        const newCount = Math.max(0, currentCount + delta);
+        const newCongestion = getCongestion(newCount, j.lanes[laneKey].capacity);
+        const newGreen = calculateGreenTime(newCount, j.lanes[laneKey].capacity);
+
+        const newLanes = {
+          ...j.lanes,
+          [laneKey]: {
+            ...j.lanes[laneKey],
+            vehicleCount: newCount,
+            congestion: newCongestion,
+            allocatedGreen: newGreen,
+            queueLengthMeters: Math.round(newCount * 5.2)
+          }
+        };
+
+        return {
+          ...j,
+          lanes: newLanes,
+          timerRemaining: j.activeLane === laneKey && j.mode === 'Adaptive' ? newGreen : j.timerRemaining
+        };
+      });
+
+      const newLog = {
+        id: `LOG-${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        junctionId: currentJunction.id,
+        event: 'Density Injected',
+        detail: `${laneKey} Lane vehicle count updated to ${Math.max(0, currentJunction.lanes[laneKey].vehicleCount + delta)}.`
+      };
+
+      return {
+        ...prevDb,
+        junctions: updatedJunctions,
+        logs: [newLog, ...prevDb.logs.slice(0, 30)]
+      };
+    });
   };
 
-  // Handle Wallet Recharge
-  const handleRecharge = async (amount) => {
-    const amt = parseFloat(amount);
-    if (!amt || amt <= 0 || !activeCard) return;
+  // Trigger Emergency Priority Corridor
+  const handleEmergencyPriority = (laneKey, vehicleName) => {
+    playEmergencyTone();
+    setDb(prevDb => {
+      const updatedJunctions = prevDb.junctions.map(j => {
+        if (j.id !== currentJunction.id) return j;
 
-    try {
-      const res = await fetch(`${API_BASE}/cards/${activeCard._id}/recharge`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: amt, location: 'Web Portal Wallet Top-up' })
-      });
-      const data = await res.json();
-      if (data.success) {
-        playTone(true);
-        setFeedback({ type: 'success', message: `Wallet topped up with ₹${amt.toFixed(2)}!` });
-        setRechargeAmount('');
-        loadData();
-      } else {
-        setFeedback({ type: 'error', message: data.error });
-      }
-    } catch (e) {
-      setFeedback({ type: 'error', message: 'Failed to process recharge.' });
-    }
-  };
-
-  // Toggle Block / Unblock card
-  const handleToggleStatus = async () => {
-    if (!activeCard) return;
-    try {
-      const res = await fetch(`${API_BASE}/cards/${activeCard._id}/status`, {
-        method: 'PUT'
-      });
-      const data = await res.json();
-      if (data.success) {
-        setFeedback({
-          type: data.data.status === 'Active' ? 'success' : 'error',
-          message: `Smart Card is now ${data.data.status.toUpperCase()}`
+        const newLanes = { ...j.lanes };
+        Object.keys(newLanes).forEach(l => {
+          if (l === laneKey) {
+            newLanes[l] = { ...newLanes[l], signal: 'Green', emergencyVehicle: true, allocatedGreen: 40 };
+          } else {
+            newLanes[l] = { ...newLanes[l], signal: 'Red', emergencyVehicle: false };
+          }
         });
-        loadData();
-      }
-    } catch (e) {
-      setFeedback({ type: 'error', message: 'Failed to toggle card status' });
-    }
-  };
 
-  // Issue new smart card
-  const handleIssueCard = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(`${API_BASE}/cards`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newCardForm)
+        return {
+          ...j,
+          activeLane: laneKey,
+          timerRemaining: 40,
+          mode: 'Emergency Priority',
+          lanes: newLanes
+        };
       });
-      const data = await res.json();
-      if (data.success) {
-        setShowIssueModal(false);
-        setFeedback({ type: 'success', message: `Card issued for ${data.data.holderName}!` });
-        loadData();
-        setActiveCard(data.data);
-      }
-    } catch (e) {
-      setFeedback({ type: 'error', message: 'Failed to issue card' });
-    }
+
+      const newLog = {
+        id: `LOG-${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        junctionId: currentJunction.id,
+        event: 'EMERGENCY CORRIDOR ACTIVATED',
+        detail: `Priority green granted to ${laneKey} lane for ${vehicleName}! Conflicting signals locked on Red.`
+      };
+
+      return {
+        ...prevDb,
+        junctions: updatedJunctions,
+        logs: [newLog, ...prevDb.logs.slice(0, 30)]
+      };
+    });
+    setIsYellowPhase(false);
   };
 
-  const terminals = [
-    { name: 'Cafeteria POS #1', type: 'Tap & Pay', cost: 80, icon: '☕', label: 'Lunch Meal (₹80)' },
-    { name: 'Central Library Turnstile', type: 'Gate Access', cost: 0, icon: '📚', label: 'Library Gate (Free)' },
-    { name: 'Campus Shuttle Bus', type: 'Tap & Pay', cost: 25, icon: '🚌', label: 'Transit Bus (₹25)' },
-    { name: 'Advanced Computing Lab', type: 'Gate Access', cost: 0, icon: '🧪', label: 'Lab Access (Free)' },
-    { name: 'Stationery & Printing', type: 'Tap & Pay', cost: 45, icon: '🖨️', label: 'Print Service (₹45)' }
-  ];
+  // Clear Emergency Corridor
+  const handleClearEmergency = () => {
+    setDb(prevDb => {
+      const updatedJunctions = prevDb.junctions.map(j => {
+        if (j.id !== currentJunction.id) return j;
+        const newLanes = { ...j.lanes };
+        Object.keys(newLanes).forEach(l => {
+          newLanes[l] = { ...newLanes[l], emergencyVehicle: false };
+        });
+        return {
+          ...j,
+          mode: 'Adaptive',
+          timerRemaining: 20
+        };
+      });
+
+      return {
+        ...prevDb,
+        junctions: updatedJunctions
+      };
+    });
+  };
+
+  // Change Operating Mode
+  const handleSetMode = (mode) => {
+    setDb(prevDb => {
+      const updatedJunctions = prevDb.junctions.map(j => {
+        if (j.id !== currentJunction.id) return j;
+        return { ...j, mode };
+      });
+      return { ...prevDb, junctions: updatedJunctions };
+    });
+  };
+
+  const isEmergencyActive = Object.values(currentJunction.lanes).some(l => l.emergencyVehicle);
 
   return (
-    <div className="smart-card-container">
-      {/* Top Header */}
-      <header className="header-bar">
-        <div className="brand-title">
-          <div className="brand-icon">💳</div>
+    <div className="traffic-app-container">
+      {/* Header */}
+      <header className="traffic-header">
+        <div className="header-brand">
+          <div className="brand-badge">🚦</div>
           <div>
-            <h1>Smart Card Identity & Digital Wallet System</h1>
-            <p>MERN Full-Stack Mini Project | RFID/NFC Campus Card Simulator</p>
+            <h1>Smart Traffic Signal Optimisation</h1>
+            <p>Adaptive Density-Weighted Scheduling (ADWS) | React.js + JSON DB</p>
           </div>
         </div>
 
-        <div className="header-actions">
-          {cards.length > 0 && (
-            <select
-              className="card-selector"
-              value={activeCard?._id || ''}
-              onChange={(e) => {
-                const sel = cards.find(c => c._id === e.target.value);
-                if (sel) {
-                  setActiveCard(sel);
-                  setFeedback(null);
-                }
-              }}
-            >
-              {cards.map(c => (
-                <option key={c._id} value={c._id}>
-                  {c.holderName} ({c.cardNumber.slice(-4)}) - {c.status}
-                </option>
-              ))}
-            </select>
-          )}
-          <button className="btn-primary" onClick={() => setShowIssueModal(true)}>
-            + Issue New Card
+        <div className="header-controls">
+          <select
+            className="junction-select"
+            value={selectedJunctionId}
+            onChange={(e) => setSelectedJunctionId(e.target.value)}
+          >
+            {db.junctions.map(j => (
+              <option key={j.id} value={j.id}>{j.name} ({j.id})</option>
+            ))}
+          </select>
+
+          <button
+            className="btn-secondary"
+            onClick={() => setIsSimulating(!isSimulating)}
+          >
+            {isSimulating ? '⏸ Pause Sim' : '▶ Resume Sim'}
+          </button>
+
+          <button
+            className="btn-primary"
+            onClick={() => advanceToNextLane()}
+          >
+            ⏭ Advance Phase
+          </button>
+
+          <button
+            className="btn-secondary"
+            onClick={() => setShowJsonDbModal(true)}
+          >
+            💾 View JSON DB
           </button>
         </div>
       </header>
 
-      {/* Main Grid */}
-      <div className="dashboard-grid">
-        {/* Left Column: Visual Card & Terminal Simulator */}
-        <div>
-          {/* 3D Smart Card Graphic */}
-          {activeCard && (
-            <div className="virtual-card-wrapper">
-              <div className={`smart-card-visual ${activeCard.status === 'Active' ? 'active-card' : 'blocked-card'}`}>
-                <div className="card-top-row">
-                  <span className="card-logo">CAMPUS SMART CARD</span>
-                  <span className={`status-pill ${activeCard.status.toLowerCase()}`}>
-                    {activeCard.status}
-                  </span>
-                </div>
-
-                <div className="card-chip-container">
-                  <div className="emv-chip"></div>
-                  <span className="nfc-wave">📶</span>
-                  <span style={{ fontSize: '11px', color: '#94a3b8', marginLeft: 'auto' }}>
-                    UID: {activeCard.cardUID}
-                  </span>
-                </div>
-
-                <div className="card-number-display">
-                  {activeCard.cardNumber}
-                </div>
-
-                <div className="card-bottom-row">
-                  <div className="holder-info">
-                    <div className="label">Cardholder</div>
-                    <div className="name">{activeCard.holderName}</div>
-                    <div className="roll">{activeCard.rollNumber} • {activeCard.department}</div>
-                  </div>
-
-                  <div className="card-balance-display">
-                    <div className="label">Wallet Balance</div>
-                    <div className="amount">₹{activeCard.balance?.toFixed(2)}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Quick Security Controls */}
-          {activeCard && (
-            <div className="panel" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <strong>Security Protection</strong>
-                <p style={{ fontSize: '12px', color: '#94a3b8' }}>
-                  {activeCard.status === 'Active' ? 'Card is fully functional.' : 'Card is locked against all transactions.'}
-                </p>
-              </div>
-              <button
-                className={activeCard.status === 'Active' ? 'btn-danger' : 'btn-primary'}
-                onClick={handleToggleStatus}
-              >
-                {activeCard.status === 'Active' ? '🔒 Block Lost Card' : '🔓 Unblock Card'}
-              </button>
-            </div>
-          )}
-
-          {/* Tap POS & Turnstile Simulator */}
-          <div className="panel">
-            <div className="panel-header">
-              <h3>📡 Tap Terminal Simulator</h3>
-              <span style={{ fontSize: '12px', color: '#94a3b8' }}>Simulate NFC/RFID Tap</span>
-            </div>
-
-            <div className="terminal-grid">
-              {terminals.map((term, i) => (
-                <div key={i} className="terminal-card" onClick={() => handleTerminalTap(term)}>
-                  <div>
-                    <div className="terminal-icon">{term.icon}</div>
-                    <div className="terminal-title">{term.name}</div>
-                  </div>
-                  <div className="terminal-cost">{term.label}</div>
-                </div>
-              ))}
-            </div>
-
-            {feedback && (
-              <div className={`feedback-banner ${feedback.type}`}>
-                <span>{feedback.type === 'success' ? '✓' : '⚠️'}</span>
-                <span>{feedback.message}</span>
-              </div>
-            )}
+      {/* Metrics Row */}
+      <div className="metrics-grid">
+        <div className="metric-card">
+          <div className="metric-icon">⏱️</div>
+          <div>
+            <div className="metric-value">{currentJunction.metrics?.avgWaitTimeSec || 38}s</div>
+            <div className="metric-label">Avg Wait Time</div>
           </div>
         </div>
 
-        {/* Right Column: Wallet Recharge & Live Ledger */}
-        <div>
-          {/* Wallet Recharge Panel */}
-          <div className="panel">
-            <div className="panel-header">
-              <h3>⚡ Digital Wallet Top-Up</h3>
-              <span style={{ fontSize: '12px', color: '#38bdf8' }}>Instant UPI / Gateway</span>
-            </div>
+        <div className="metric-card">
+          <div className="metric-icon">🚗</div>
+          <div>
+            <div className="metric-value">{currentJunction.metrics?.throughputVehiclesPerMin || 64}/min</div>
+            <div className="metric-label">Vehicle Throughput</div>
+          </div>
+        </div>
 
-            <div className="quick-recharge-row">
-              <button className="chip-btn" onClick={() => handleRecharge(100)}>+ ₹100</button>
-              <button className="chip-btn" onClick={() => handleRecharge(500)}>+ ₹500</button>
-              <button className="chip-btn" onClick={() => handleRecharge(1000)}>+ ₹1,000</button>
-            </div>
+        <div className="metric-card">
+          <div className="metric-icon">🌱</div>
+          <div>
+            <div className="metric-value">{currentJunction.metrics?.co2SavedKg || 142.8} kg</div>
+            <div className="metric-label">CO2 Emissions Saved</div>
+          </div>
+        </div>
 
-            <form
-              className="custom-recharge-row"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleRecharge(rechargeAmount);
-              }}
-            >
-              <input
-                type="number"
-                placeholder="Enter custom amount (₹)"
-                value={rechargeAmount}
-                onChange={(e) => setRechargeAmount(e.target.value)}
-                min="10"
-              />
-              <button type="submit" className="btn-primary">Top Up</button>
-            </form>
+        <div className="metric-card">
+          <div className="metric-icon">🔄</div>
+          <div>
+            <div className="metric-value">{currentJunction.metrics?.totalCyclesCompleted || 184}</div>
+            <div className="metric-label">Adaptive Cycles Completed</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main 2-Column Dashboard */}
+      <div className="main-layout">
+        {/* Left Column: 4-Way Intersection Visualizer */}
+        <div className="panel">
+          <div className="panel-title-bar">
+            <h2>4-Way Crossroad Live Visualizer</h2>
+            <div className="mode-toggle-group">
+              <button
+                className={`mode-btn ${currentJunction.mode === 'Adaptive' ? 'active' : ''}`}
+                onClick={() => handleSetMode('Adaptive')}
+              >
+                Adaptive (AI)
+              </button>
+              <button
+                className={`mode-btn ${currentJunction.mode === 'Fixed' ? 'active' : ''}`}
+                onClick={() => handleSetMode('Fixed')}
+              >
+                Fixed (25s)
+              </button>
+              <button
+                className={`mode-btn ${currentJunction.mode === 'Manual' ? 'active' : ''}`}
+                onClick={() => handleSetMode('Manual')}
+              >
+                Manual
+              </button>
+            </div>
           </div>
 
-          {/* Live Transaction Ledger */}
+          <div className="intersection-wrapper">
+            {isEmergencyActive && (
+              <div className="emergency-indicator">
+                🚨 EMERGENCY CORRIDOR ACTIVE 🚨
+              </div>
+            )}
+
+            <div className="intersection-canvas">
+              {/* Road Markings */}
+              <div className="road-vertical"></div>
+              <div className="road-horizontal"></div>
+
+              {/* Center Box */}
+              <div className="intersection-center">
+                <div className="center-radar">
+                  <div>RADAR</div>
+                  <div style={{ fontSize: '16px' }}>📡</div>
+                  <div style={{ fontSize: '10px', color: '#94a3b8' }}>{currentJunction.mode}</div>
+                </div>
+              </div>
+
+              {/* North Lane */}
+              <div className="lane-zone north">
+                <div className="signal-lamp-box">
+                  <span className={`light-circle red ${currentJunction.lanes.North.signal === 'Red' && !isYellowPhase ? 'active' : ''}`}></span>
+                  <span className={`light-circle yellow ${isYellowPhase && currentJunction.activeLane === 'North' ? 'active' : ''}`}></span>
+                  <span className={`light-circle green ${currentJunction.lanes.North.signal === 'Green' && !isYellowPhase ? 'active' : ''}`}></span>
+                  <span className={`signal-timer-badge ${currentJunction.lanes.North.signal === 'Green' ? (isYellowPhase ? 'yellow' : 'green') : 'red'}`}>
+                    {currentJunction.activeLane === 'North' ? `${currentJunction.timerRemaining}s` : '--'}
+                  </span>
+                </div>
+                <div style={{ fontSize: '11px', fontWeight: 600, color: '#e2e8f0' }}>NORTH</div>
+                <div className="vehicles-queue-preview">
+                  {currentJunction.lanes.North.emergencyVehicle && <span>🚑</span>}
+                  {Array.from({ length: Math.min(8, Math.ceil(currentJunction.lanes.North.vehicleCount / 4)) }).map((_, i) => (
+                    <span key={i}>🚗</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* South Lane */}
+              <div className="lane-zone south">
+                <div className="vehicles-queue-preview">
+                  {currentJunction.lanes.South.emergencyVehicle && <span>🚑</span>}
+                  {Array.from({ length: Math.min(8, Math.ceil(currentJunction.lanes.South.vehicleCount / 4)) }).map((_, i) => (
+                    <span key={i}>🚙</span>
+                  ))}
+                </div>
+                <div style={{ fontSize: '11px', fontWeight: 600, color: '#e2e8f0', marginTop: '2px' }}>SOUTH</div>
+                <div className="signal-lamp-box">
+                  <span className={`light-circle red ${currentJunction.lanes.South.signal === 'Red' && !isYellowPhase ? 'active' : ''}`}></span>
+                  <span className={`light-circle yellow ${isYellowPhase && currentJunction.activeLane === 'South' ? 'active' : ''}`}></span>
+                  <span className={`light-circle green ${currentJunction.lanes.South.signal === 'Green' && !isYellowPhase ? 'active' : ''}`}></span>
+                  <span className={`signal-timer-badge ${currentJunction.lanes.South.signal === 'Green' ? (isYellowPhase ? 'yellow' : 'green') : 'red'}`}>
+                    {currentJunction.activeLane === 'South' ? `${currentJunction.timerRemaining}s` : '--'}
+                  </span>
+                </div>
+              </div>
+
+              {/* West Lane */}
+              <div className="lane-zone west">
+                <div className="signal-lamp-box">
+                  <span className={`light-circle red ${currentJunction.lanes.West.signal === 'Red' && !isYellowPhase ? 'active' : ''}`}></span>
+                  <span className={`light-circle yellow ${isYellowPhase && currentJunction.activeLane === 'West' ? 'active' : ''}`}></span>
+                  <span className={`light-circle green ${currentJunction.lanes.West.signal === 'Green' && !isYellowPhase ? 'active' : ''}`}></span>
+                  <span className={`signal-timer-badge ${currentJunction.lanes.West.signal === 'Green' ? (isYellowPhase ? 'yellow' : 'green') : 'red'}`}>
+                    {currentJunction.activeLane === 'West' ? `${currentJunction.timerRemaining}s` : '--'}
+                  </span>
+                </div>
+                <div style={{ fontSize: '11px', fontWeight: 600, color: '#e2e8f0' }}>WEST</div>
+                <div className="vehicles-queue-preview">
+                  {currentJunction.lanes.West.emergencyVehicle && <span>🚒</span>}
+                  {Array.from({ length: Math.min(8, Math.ceil(currentJunction.lanes.West.vehicleCount / 4)) }).map((_, i) => (
+                    <span key={i}>🚌</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* East Lane */}
+              <div className="lane-zone east">
+                <div className="signal-lamp-box">
+                  <span className={`light-circle red ${currentJunction.lanes.East.signal === 'Red' && !isYellowPhase ? 'active' : ''}`}></span>
+                  <span className={`light-circle yellow ${isYellowPhase && currentJunction.activeLane === 'East' ? 'active' : ''}`}></span>
+                  <span className={`light-circle green ${currentJunction.lanes.East.signal === 'Green' && !isYellowPhase ? 'active' : ''}`}></span>
+                  <span className={`signal-timer-badge ${currentJunction.lanes.East.signal === 'Green' ? (isYellowPhase ? 'yellow' : 'green') : 'red'}`}>
+                    {currentJunction.activeLane === 'East' ? `${currentJunction.timerRemaining}s` : '--'}
+                  </span>
+                </div>
+                <div style={{ fontSize: '11px', fontWeight: 600, color: '#e2e8f0' }}>EAST</div>
+                <div className="vehicles-queue-preview">
+                  {currentJunction.lanes.East.emergencyVehicle && <span>🚑</span>}
+                  {Array.from({ length: Math.min(8, Math.ceil(currentJunction.lanes.East.vehicleCount / 4)) }).map((_, i) => (
+                    <span key={i}>🚗</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Lane Density Controls & Emergency Override */}
+        <div>
+          {/* Lane Density & Timings */}
           <div className="panel">
-            <div className="panel-header">
-              <h3>📜 Real-Time Transaction Ledger</h3>
-              <span style={{ fontSize: '12px', color: '#94a3b8' }}>{transactions.length} records</span>
+            <div className="panel-header" style={{ marginBottom: '14px' }}>
+              <h3 style={{ fontSize: '15px' }}>Lane Density & Adaptive Timers</h3>
+              <span style={{ fontSize: '12px', color: '#94a3b8' }}>Formula: 15s - 60s dynamically</span>
             </div>
 
-            <div className="tx-list">
-              {transactions.length === 0 ? (
-                <p style={{ color: '#64748b', fontSize: '13px' }}>No transactions recorded yet.</p>
-              ) : (
-                transactions.map((tx, idx) => {
-                  const isCredit = tx.type === 'Recharge';
-                  const isGate = tx.type === 'Gate Access';
-                  return (
-                    <div key={tx._id || idx} className="tx-item">
-                      <div className="tx-main">
-                        <div className="tx-icon">
-                          {isCredit ? '📥' : isGate ? '🚪' : '💳'}
-                        </div>
-                        <div>
-                          <div className="tx-title">{tx.location}</div>
-                          <div className="tx-meta">
-                            {tx.type} • {new Date(tx.createdAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} •{' '}
-                            <span style={{ color: tx.status === 'Success' ? '#34d399' : '#f87171' }}>
-                              {tx.status}
-                            </span>
-                          </div>
-                        </div>
+            <div className="lane-controls-list">
+              {Object.entries(currentJunction.lanes).map(([dir, lane]) => {
+                const isGreen = lane.signal === 'Green';
+                return (
+                  <div key={dir} className={`lane-item-card ${isGreen ? 'is-active-green' : ''}`}>
+                    <div className="lane-meta">
+                      <h4>{dir} ({lane.streetName})</h4>
+                      <p>
+                        Allocated: <strong>{lane.allocatedGreen}s</strong> | Queue: {lane.queueLengthMeters}m
+                      </p>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span className={`congestion-pill ${lane.congestion.toLowerCase()}`}>
+                        {lane.congestion}
+                      </span>
+                      <span style={{ fontSize: '14px', fontWeight: 700, minWidth: '34px', textAlign: 'right' }}>
+                        {lane.vehicleCount}
+                      </span>
+
+                      <div className="density-slider-row">
+                        <button className="density-btn" onClick={() => handleUpdateDensity(dir, -5)}>-5</button>
+                        <button className="density-btn" onClick={() => handleUpdateDensity(dir, +5)}>+5</button>
+                        <button className="density-btn" onClick={() => handleUpdateDensity(dir, +10)}>+10</button>
                       </div>
 
-                      <div className={`tx-amount ${isCredit ? 'credit' : isGate ? 'neutral' : 'debit'}`}>
-                        {isCredit ? `+₹${tx.amount.toFixed(2)}` : isGate ? 'Access' : `-₹${tx.amount.toFixed(2)}`}
-                      </div>
+                      {currentJunction.mode === 'Manual' && !isGreen && (
+                        <button
+                          className="btn-primary"
+                          style={{ padding: '4px 10px', fontSize: '11px' }}
+                          onClick={() => advanceToNextLane(dir)}
+                        >
+                          Make Green
+                        </button>
+                      )}
                     </div>
-                  );
-                })
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Emergency Corridor Override */}
+          <div className="panel">
+            <div className="panel-header" style={{ marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '15px', color: '#f87171' }}>🚨 Emergency Vehicle Priority Override</h3>
+              {isEmergencyActive && (
+                <button
+                  className="btn-secondary"
+                  style={{ fontSize: '11px', padding: '4px 8px' }}
+                  onClick={handleClearEmergency}
+                >
+                  Clear Emergency
+                </button>
               )}
+            </div>
+
+            <div className="emergency-grid">
+              <button
+                className="btn-emergency"
+                onClick={() => handleEmergencyPriority('North', 'Ambulance #108')}
+              >
+                <span>🚑</span> North Ambulance
+              </button>
+              <button
+                className="btn-emergency"
+                onClick={() => handleEmergencyPriority('West', 'Fire Engine #101')}
+              >
+                <span>🚒</span> West Fire Engine
+              </button>
+              <button
+                className="btn-emergency"
+                onClick={() => handleEmergencyPriority('East', 'Police Interceptor')}
+              >
+                <span>🚓</span> East Police Unit
+              </button>
+              <button
+                className="btn-emergency"
+                onClick={() => handleEmergencyPriority('South', 'Emergency Ambulance')}
+              >
+                <span>🚑</span> South Ambulance
+              </button>
+            </div>
+          </div>
+
+          {/* Live System Logs */}
+          <div className="panel">
+            <div className="panel-header" style={{ marginBottom: '10px' }}>
+              <h3 style={{ fontSize: '15px' }}>📜 Real-Time Audit Logs</h3>
+              <span style={{ fontSize: '12px', color: '#94a3b8' }}>{db.logs.length} entries</span>
+            </div>
+
+            <div className="logs-list">
+              {db.logs.slice(0, 6).map(log => {
+                const isEmerg = log.event.includes('EMERGENCY');
+                return (
+                  <div key={log.id} className={`log-item ${isEmerg ? 'emergency' : ''}`}>
+                    <div className="log-header">
+                      <span className="log-event">{log.event}</span>
+                      <span>{new Date(log.timestamp).toLocaleTimeString()}</span>
+                    </div>
+                    <div className="log-detail">{log.detail}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Modal: Issue New Card */}
-      {showIssueModal && (
+      {/* Modal: View Dummy JSON Database */}
+      {showJsonDbModal && (
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
+          background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
         }}>
-          <div className="panel" style={{ maxWidth: '480px', width: '90%', background: '#111827' }}>
-            <div className="panel-header">
-              <h3>Issue New Smart Card</h3>
+          <div className="panel" style={{ maxWidth: '650px', width: '92%', background: '#111a2e', maxHeight: '85vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <div className="panel-title-bar">
+              <h2>Sample Dummy Database (JSON)</h2>
               <button
-                onClick={() => setShowIssueModal(false)}
+                onClick={() => setShowJsonDbModal(false)}
                 style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '18px' }}
               >
                 ✕
               </button>
             </div>
-
-            <form onSubmit={handleIssueCard} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div>
-                <label style={{ fontSize: '12px', color: '#94a3b8' }}>Full Name</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Rahul Sharma"
-                  value={newCardForm.holderName}
-                  onChange={(e) => setNewCardForm({ ...newCardForm, holderName: e.target.value })}
-                />
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                <div>
-                  <label style={{ fontSize: '12px', color: '#94a3b8' }}>Roll / Employee ID</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="22CS101"
-                    value={newCardForm.rollNumber}
-                    onChange={(e) => setNewCardForm({ ...newCardForm, rollNumber: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <label style={{ fontSize: '12px', color: '#94a3b8' }}>Card Type</label>
-                  <select
-                    value={newCardForm.cardType}
-                    onChange={(e) => setNewCardForm({ ...newCardForm, cardType: e.target.value })}
-                  >
-                    <option value="Student">Student</option>
-                    <option value="Faculty">Faculty</option>
-                    <option value="Staff">Staff</option>
-                    <option value="Visitor">Visitor</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label style={{ fontSize: '12px', color: '#94a3b8' }}>Email Address</label>
-                <input
-                  type="email"
-                  required
-                  placeholder="user@college.edu"
-                  value={newCardForm.email}
-                  onChange={(e) => setNewCardForm({ ...newCardForm, email: e.target.value })}
-                />
-              </div>
-
-              <div>
-                <label style={{ fontSize: '12px', color: '#94a3b8' }}>Department</label>
-                <input
-                  type="text"
-                  placeholder="Computer Science & Engineering"
-                  value={newCardForm.department}
-                  onChange={(e) => setNewCardForm({ ...newCardForm, department: e.target.value })}
-                />
-              </div>
-
-              <div>
-                <label style={{ fontSize: '12px', color: '#94a3b8' }}>Initial Balance (₹)</label>
-                <input
-                  type="number"
-                  placeholder="500"
-                  value={newCardForm.initialBalance}
-                  onChange={(e) => setNewCardForm({ ...newCardForm, initialBalance: e.target.value })}
-                />
-              </div>
-
-              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                <button type="submit" className="btn-primary" style={{ flex: 1 }}>
-                  Issue Smart Card
-                </button>
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  onClick={() => setShowIssueModal(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+            <p style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '12px' }}>
+              This is the live JSON state representing `trafficDB.json` containing intersections, sensor queue metrics, and logs:
+            </p>
+            <div className="json-viewer">
+              {JSON.stringify(db, null, 2)}
+            </div>
+            <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <button
+                className="btn-secondary"
+                onClick={() => {
+                  setDb(initialTrafficDB);
+                  setShowJsonDbModal(false);
+                }}
+              >
+                Reset to Default JSON
+              </button>
+              <button
+                className="btn-primary"
+                onClick={() => setShowJsonDbModal(false)}
+              >
+                Close Viewer
+              </button>
+            </div>
           </div>
         </div>
       )}

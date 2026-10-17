@@ -172,11 +172,12 @@ Internal lab assessments with question papers, execution screenshots, and practi
 - **Internal Assessment 02**: Full-stack MERN issue tracker / ticket system.
 
 ### `05-individual-mini-project`
-**Smart Card Identity & Digital Wallet System**:
-- **Virtual Smart Card UI**: Realistic 3D contactless card interface with EMV chip, NFC UID, and live balance display.
-- **POS & Turnstile Simulator**: Tap-to-pay cafeteria purchases, bus transit, and turnstile access control with Web Audio tone feedback.
-- **Digital Wallet Management**: Wallet top-ups, 1-click card blocking for lost cards, and real-time transaction auditing ledger.
-- **Cloud Deployment**: Production configurations for Vercel (client), Render (server), and MongoDB Atlas (cloud database).
+**Smart Traffic Signal Optimisation System**:
+- **Adaptive Density Scheduling**: Real-time traffic density evaluation with dynamic green light duration calculations (15s to 60s).
+- **4-Way Crossroad Live Visualizer**: Interactive animated intersection canvas showing signal lamps, countdown timers, and vehicle queues.
+- **Emergency Priority Corridor**: 1-click green corridor override for ambulances and fire engines.
+- **Sample Dummy Database (JSON)**: Lightweight data persistence and inspection with `trafficDB.json`.
+- **Cloud Deployment**: Ready-to-deploy configurations for Vercel (client SPA) and Render (Express backend).
 
 ---
 

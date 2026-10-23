@@ -1,72 +1,91 @@
-# Group Project: Campus Resource & Lab Booking Portal 🏢
+# RecoAI – E-Commerce Recommendation Engine (Association Rules) 🛍️
 
-> A Collaborative Full-Stack MERN (MongoDB, Express.js, React.js, Node.js) web application designed for campus lab reservation and inventory management.
+> Intelligent Full-Stack E-Commerce Recommendation Web Application powered by **React, TypeScript (Vite)**, **Flask**, **MongoDB**, and **Apriori Association Rule Mining (mlxtend)**.
 
 ---
 
 ## 🌟 Overview
 
-The **Campus Resource & Lab Booking Portal** streamlines access to specialized campus facilities (AI & GPU Compute clusters, Web Development labs, IoT & Robotics workstations, and Seminar Auditoriums).
+**RecoAI** analyzes customer purchasing behavior and basket affinity in real-time. By applying the **Apriori Algorithm**, it identifies hidden product associations and generates dynamic recommendations (support, confidence, and lift) as shoppers browse and build their carts.
 
 ### Core Features
-- **Live Inventory Dashboard**: Real-time visualization of facility availability, total seat capacity, and current booking status.
-- **1-Click Booking & Release**: Instant resource reservation with optimistic UI updates.
-- **MERN Architecture**: Clean separation between a responsive React frontend (`client/`) and a resilient Express/MongoDB backend (`server/`).
-- **Resilient Fallback**: Automatically serves in-memory seed records if local MongoDB daemon is offline during evaluation.
+- **Smart Recommendations**: Real-time cross-sell suggestions based on mined association rules.
+- **Analytics Dashboard**: Live metrics tracking catalog size, total transactions, active rules, and confidence ratings.
+- **Modern React + Vite Frontend**: Fast, responsive UI with cart management, order history, and product details.
+- **Flask REST API**: Modular Python backend handling authentication, rule mining, and transactional history.
+- **MongoDB Database**: Document store for users, orders, and market basket transactions.
 
 ---
 
-## 📁 Directory Structure
+## 📸 Visual Previews
+
+### 1. Smart Shop Storefront & Recommendation Engine
+![Smart Shop Storefront](screenshots/group-project-ui.png)
+
+### 2. Analytics & Association Rule Mining Dashboard
+![RecoAI Dashboard](screenshots/backend-api-health.png)
+
+---
+
+## 📁 Project Structure
 
 ```
 Group-Project/
 ├── README.md
+├── docker-compose.yml
 ├── screenshots/
 │   ├── group-project-ui.png
 │   └── backend-api-health.png
-├── client/          # React Frontend SPA
-│   ├── package.json
+├── frontend/ (or client/)        # React + TypeScript (Vite) SPA
 │   ├── index.html
+│   ├── vite.config.js
+│   ├── package.json
+│   ├── public/
 │   └── src/
-│       ├── App.jsx
-│       ├── App.css
-│       └── main.jsx
-└── server/          # Node + Express + MongoDB Backend
-    ├── package.json
-    ├── server.js
+│       ├── components/          # ProductCard, RecommendationCard, Navbar, etc.
+│       ├── pages/               # Landing, Dashboard, Cart, Orders, Admin
+│       ├── context/             # AuthContext, CartContext
+│       └── data/                # products.ts
+└── backend/ (or server/)         # Flask + MongoDB REST API
+    ├── app.py
+    ├── requirements.txt
+    ├── transactions.csv
     ├── .env.example
-    ├── config/
-    │   └── db.js
     ├── models/
-    │   └── Resource.js
     └── routes/
-        └── api.js
 ```
 
 ---
 
 ## 🚀 How to Run
 
-### 1. Run Backend Server
+### 1. Database (MongoDB)
+Start local MongoDB using Docker:
 ```bash
-cd Group-Project/server
-npm install
-npm start
+cd Group-Project
+docker compose up -d
 ```
-*Backend runs on `http://localhost:5000`.*
+*Defaults to `mongodb://localhost:27017` with database `recoai`.*
 
-### 2. Run Frontend Client
+### 2. Backend API (Flask)
 ```bash
-cd Group-Project/client
-npm install
-npm start
+cd Group-Project/backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python app.py
 ```
-*Frontend runs on `http://localhost:3000`.*
+*Backend runs on `http://127.0.0.1:5000`.*
+
+### 3. Frontend Client (Vite + React)
+```bash
+cd Group-Project/frontend
+npm install
+npm run dev
+```
+*Frontend runs on `http://localhost:5173`.*
 
 ---
 
-## 👥 Team & Roles
-- **Frontend Architecture & React Components**: UI implementation and state management.
-- **Backend API & REST Routing**: Express endpoints and CORS middleware.
-- **Database Schema & Modeling**: Mongoose ORM models and validation.
-- **Testing & Deployment**: API integration tests and documentation.
+## 👤 Author & Team
+- **Rajesh Gorika** - [@rajeshgorika](https://github.com/rajeshgorika)

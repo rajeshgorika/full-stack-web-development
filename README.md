@@ -52,11 +52,12 @@ full-stack-web-development/
 │
 └── Group-Project/
     ├── README.md
+    ├── docker-compose.yml
     ├── screenshots/
     │   ├── group-project-ui.png
     │   └── backend-api-health.png
-    ├── client/          # React
-    └── server/          # Node + Express + MongoDB
+    ├── frontend/ (or client/) # React + TypeScript (Vite)
+    └── backend/ (or server/)  # Flask + MongoDB + Apriori Engine
 ```
 
 ---
@@ -79,7 +80,7 @@ Contains official laboratory electronic records (E-Records) with finalized pract
 - **`Assignment-2-Individual-Project/`**: **Smart Traffic Signal Optimisation System** built using HTML, CSS, React.js, and a sample dummy database (`data.json`). Features 4-way intersection visualization, adaptive density-weighted green timing, and emergency corridor overrides.
 
 ### 4. `Group-Project/`
-- **Campus Resource & Lab Booking Portal**: Full-stack MERN collaborative project featuring a React SPA frontend (`client/`) and an Express + MongoDB REST API backend (`server/`).
+- **RecoAI – E-Commerce Recommendation Engine**: Full-stack application combining a modern React + TypeScript (Vite) frontend with a Python Flask REST API, MongoDB storage, and Apriori Association Rule Mining (`mlxtend`) to deliver real-time product recommendations based on market basket analysis.
 
 ---
 

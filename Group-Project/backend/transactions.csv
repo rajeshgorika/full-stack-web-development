@@ -1,0 +1,101 @@
+TransactionID,Products
+1,Laptop|Wireless Mouse|Keyboard|Laptop Bag
+2,Laptop|Wireless Mouse|Keyboard
+3,Laptop|Laptop Bag|USB Hub
+4,Laptop|Wireless Mouse|Laptop Bag
+5,Smartphone|Phone Case|USB-C Fast Charger|Screen Protector
+6,Smartphone|Phone Case|Wireless Earbuds
+7,Smartphone|USB-C Fast Charger|Power Bank
+8,Smartphone|Phone Case|USB-C Fast Charger
+9,Wireless Headphones|Laptop|Wireless Mouse
+10,Laptop|Keyboard|Mouse Pad|Laptop Bag
+11,Smartphone|Phone Case|Screen Protector
+12,Smartphone|Wireless Earbuds|Power Bank
+13,Laptop|Wireless Mouse|USB Hub
+14,Laptop|Keyboard|Wireless Mouse
+15,Smartphone|Phone Case|USB-C Fast Charger|Power Bank
+16,Wireless Headphones|Bluetooth Speaker|Smart Watch
+17,Wireless Headphones|Laptop|Laptop Bag
+18,Smartphone|Phone Case|Wireless Earbuds|Power Bank
+19,Laptop|Wireless Mouse|Keyboard|Mouse Pad
+20,Smartphone|USB-C Fast Charger|Power Bank
+21,Laptop|Wireless Mouse|Laptop Bag
+22,Smartphone|Phone Case|Screen Protector|USB-C Fast Charger
+23,Wireless Headphones|Laptop|Wireless Mouse
+24,Bluetooth Speaker|Smart Watch|Wireless Earbuds
+25,Laptop|Keyboard|Laptop Bag|USB Hub
+26,Smartphone|Phone Case|Wireless Earbuds
+27,Laptop|Wireless Mouse|Keyboard
+28,Smartphone|USB-C Fast Charger|Power Bank|Phone Case
+29,Wireless Headphones|Bluetooth Speaker
+30,Laptop|Laptop Bag|Mouse Pad
+31,Smartphone|Phone Case|Screen Protector
+32,Laptop|Wireless Mouse|USB Hub
+33,Smartphone|Wireless Earbuds|Power Bank
+34,Laptop|Keyboard|Wireless Mouse|Laptop Bag
+35,Smartphone|Phone Case|USB-C Fast Charger
+36,Wireless Headphones|Bluetooth Speaker|Wireless Earbuds
+37,Laptop|Wireless Mouse|Keyboard
+38,Smartphone|Phone Case|Power Bank
+39,Laptop|Laptop Bag|USB Hub|Wireless Mouse
+40,Smartphone|USB-C Fast Charger|Screen Protector
+41,Wireless Headphones|Laptop|Wireless Mouse|Laptop Bag
+42,Smartphone|Phone Case|Wireless Earbuds
+43,Laptop|Keyboard|Mouse Pad
+44,Bluetooth Speaker|Smart Watch|Wireless Earbuds
+45,Smartphone|Phone Case|USB-C Fast Charger|Power Bank
+46,Laptop|Wireless Mouse|Laptop Bag
+47,Smartphone|Screen Protector|USB-C Fast Charger
+48,Wireless Headphones|Bluetooth Speaker
+49,Laptop|Keyboard|Wireless Mouse|USB Hub
+50,Smartphone|Phone Case|Wireless Earbuds|Power Bank
+51,Laptop|Wireless Mouse|Keyboard|Laptop Bag
+52,Smartphone|Phone Case|USB-C Fast Charger
+53,Bluetooth Speaker|Wireless Earbuds|Smart Watch
+54,Laptop|Laptop Bag|Mouse Pad|Wireless Mouse
+55,Smartphone|Phone Case|Screen Protector
+56,Laptop|Wireless Mouse|USB Hub
+57,Smartphone|Wireless Earbuds|Power Bank
+58,Wireless Headphones|Laptop|Wireless Mouse
+59,Laptop|Keyboard|Laptop Bag
+60,Smartphone|Phone Case|USB-C Fast Charger|Screen Protector
+61,Bluetooth Speaker|Wireless Earbuds
+62,Laptop|Wireless Mouse|Keyboard|Mouse Pad
+63,Smartphone|Phone Case|Power Bank
+64,Laptop|Laptop Bag|USB Hub
+65,Smartphone|USB-C Fast Charger|Power Bank
+66,Wireless Headphones|Bluetooth Speaker|Smart Watch
+67,Laptop|Wireless Mouse|Laptop Bag
+68,Smartphone|Phone Case|Wireless Earbuds
+69,Laptop|Keyboard|Wireless Mouse|Laptop Bag
+70,Smartphone|Phone Case|USB-C Fast Charger
+71,Bluetooth Speaker|Wireless Earbuds|Smart Watch
+72,Laptop|Wireless Mouse|USB Hub|Mouse Pad
+73,Smartphone|Phone Case|Screen Protector|Power Bank
+74,Laptop|Laptop Bag|Keyboard
+75,Smartphone|USB-C Fast Charger|Wireless Earbuds
+76,Wireless Headphones|Laptop|Wireless Mouse
+77,Laptop|Keyboard|Wireless Mouse
+78,Smartphone|Phone Case|USB-C Fast Charger|Power Bank
+79,Bluetooth Speaker|Smart Watch
+80,Laptop|Wireless Mouse|Laptop Bag|USB Hub
+81,Smartphone|Phone Case|Screen Protector|Wireless Earbuds
+82,Laptop|Keyboard|Mouse Pad|Laptop Bag
+83,Smartphone|USB-C Fast Charger|Power Bank
+84,Wireless Headphones|Bluetooth Speaker|Wireless Earbuds
+85,Laptop|Wireless Mouse|Keyboard
+86,Smartphone|Phone Case|USB-C Fast Charger
+87,Laptop|Laptop Bag|USB Hub|Wireless Mouse
+88,Smartphone|Wireless Earbuds|Power Bank
+89,Bluetooth Speaker|Smart Watch|Wireless Earbuds
+90,Laptop|Wireless Mouse|Keyboard|Laptop Bag
+91,Smartphone|Phone Case|Screen Protector|USB-C Fast Charger
+92,Laptop|Keyboard|Wireless Mouse|Mouse Pad
+93,Smartphone|Phone Case|Power Bank
+94,Wireless Headphones|Laptop|Wireless Mouse|Laptop Bag
+95,Smartphone|USB-C Fast Charger|Power Bank|Phone Case
+96,Bluetooth Speaker|Wireless Earbuds
+97,Laptop|Wireless Mouse|USB Hub
+98,Smartphone|Phone Case|Wireless Earbuds
+99,Laptop|Keyboard|Laptop Bag|Mouse Pad
+100,Smartphone|Phone Case|USB-C Fast Charger|Screen Protector

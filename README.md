@@ -13,7 +13,9 @@ full-stack-web-development/
 ├── .gitignore
 │
 ├── Observation/
+│   ├── Observation.pdf
 │   └── PDFs/
+│       ├── Observation.pdf
 │       ├── Observation_Week01.pdf
 │       ├── Observation_Week02.pdf
 │       ├── Observation_Week03.pdf
@@ -65,12 +67,9 @@ full-stack-web-development/
 ## 📚 Section Breakdown
 
 ### 1. `Observation/`
-Contains laboratory observation PDFs covering weekly lab work:
-- Week 01: HTML5 and CSS3
-- Week 02: JavaScript ES6 and DOM Manipulation
-- Week 03: Node and Express JS
-- Week 04: MongoDB and Mongoose ORM
-- Week 05: Full-Stack MERN Integration
+Contains laboratory practical observations covering the full-stack curriculum:
+- **`Observation.pdf`**: Official 24-page comprehensive laboratory observation record covering Experiments 1 through 9 (HTML5 & CSS3 fundamentals, Pomodoro Timer, Audio/Video tags, JS Arrays & Functions, Dynamic Webpages, Node.js Modules, Express Student Management System, React Components & State, JSON Server CRUD operations, and MongoDB + Mongoose REST APIs).
+- **`PDFs/`**: Topic-wise laboratory observation PDFs.
 
 ### 2. `E-Record/`
 Contains official laboratory electronic records (E-Records) with finalized practical experiments, source code proofs, and evaluation criteria.

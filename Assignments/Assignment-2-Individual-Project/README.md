@@ -39,6 +39,16 @@ Assignment-2-Individual-Project/
 
 ---
 
+## 📸 Visual Previews
+
+### 1. Adaptive Traffic Simulation Dashboard
+![Adaptive Traffic Simulation Dashboard](screenshots/traffic-simulation-dashboard.png)
+
+### 2. Emergency Priority Green Corridor Override
+![Emergency Corridor Active](screenshots/emergency-corridor-active.png)
+
+---
+
 ## 🧠 Adaptive Algorithm Formula
 
 For any lane $L$ with vehicle count $V_L$ and road capacity $C_L = 45$:

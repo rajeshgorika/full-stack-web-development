@@ -21,7 +21,9 @@ full-stack-web-development/
 │       └── Observation_Week05.pdf
 │
 ├── E-Record/
+│   ├── E-Record.pdf
 │   └── PDFs/
+│       ├── E-Record.pdf
 │       ├── Record_Week01.pdf
 │       ├── Record_Week02.pdf
 │       ├── Record_Week03.pdf

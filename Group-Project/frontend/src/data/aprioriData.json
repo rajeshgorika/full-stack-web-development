@@ -1,0 +1,1997 @@
+{
+  "total_transactions": 100,
+  "total_products": 15,
+  "total_rules": 163,
+  "average_confidence": 54.26,
+  "popular_products": [
+    {
+      "name": "Laptop",
+      "category": "Computing",
+      "purchases": 45,
+      "growth": "+45.0%"
+    },
+    {
+      "name": "Smartphone",
+      "category": "Accessories",
+      "purchases": 41,
+      "growth": "+41.0%"
+    },
+    {
+      "name": "Wireless Mouse",
+      "category": "Computing",
+      "purchases": 34,
+      "growth": "+34.0%"
+    },
+    {
+      "name": "Phone Case",
+      "category": "Accessories",
+      "purchases": 30,
+      "growth": "+30.0%"
+    },
+    {
+      "name": "Laptop Bag",
+      "category": "Computing",
+      "purchases": 25,
+      "growth": "+25.0%"
+    },
+    {
+      "name": "Keyboard",
+      "category": "Computing",
+      "purchases": 22,
+      "growth": "+22.0%"
+    },
+    {
+      "name": "USB-C Fast Charger",
+      "category": "Accessories",
+      "purchases": 22,
+      "growth": "+22.0%"
+    },
+    {
+      "name": "Wireless Earbuds",
+      "category": "Audio",
+      "purchases": 22,
+      "growth": "+22.0%"
+    },
+    {
+      "name": "Power Bank",
+      "category": "Accessories",
+      "purchases": 19,
+      "growth": "+19.0%"
+    },
+    {
+      "name": "Bluetooth Speaker",
+      "category": "Audio",
+      "purchases": 14,
+      "growth": "+14.0%"
+    },
+    {
+      "name": "Wireless Headphones",
+      "category": "Audio",
+      "purchases": 13,
+      "growth": "+13.0%"
+    },
+    {
+      "name": "USB Hub",
+      "category": "Accessories",
+      "purchases": 12,
+      "growth": "+12.0%"
+    },
+    {
+      "name": "Screen Protector",
+      "category": "Accessories",
+      "purchases": 12,
+      "growth": "+12.0%"
+    },
+    {
+      "name": "Mouse Pad",
+      "category": "Computing",
+      "purchases": 10,
+      "growth": "+10.0%"
+    },
+    {
+      "name": "Smart Watch",
+      "category": "Accessories",
+      "purchases": 8,
+      "growth": "+8.0%"
+    }
+  ],
+  "rules": [
+    {
+      "antecedents": [
+        "Laptop"
+      ],
+      "consequents": [
+        "Keyboard"
+      ],
+      "support": 22.0,
+      "confidence": 48.89,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Keyboard"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 22.0,
+      "confidence": 100.0,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Laptop"
+      ],
+      "consequents": [
+        "Wireless Mouse"
+      ],
+      "support": 34.0,
+      "confidence": 75.56,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 34.0,
+      "confidence": 100.0,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Laptop"
+      ],
+      "consequents": [
+        "Laptop Bag"
+      ],
+      "support": 25.0,
+      "confidence": 55.56,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 25.0,
+      "confidence": 100.0,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Keyboard"
+      ],
+      "consequents": [
+        "Wireless Mouse"
+      ],
+      "support": 15.0,
+      "confidence": 68.18,
+      "lift": 2.01
+    },
+    {
+      "antecedents": [
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Keyboard"
+      ],
+      "support": 15.0,
+      "confidence": 44.12,
+      "lift": 2.01
+    },
+    {
+      "antecedents": [
+        "Keyboard"
+      ],
+      "consequents": [
+        "Laptop Bag"
+      ],
+      "support": 11.0,
+      "confidence": 50.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "Keyboard"
+      ],
+      "support": 11.0,
+      "confidence": 44.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Laptop Bag"
+      ],
+      "support": 15.0,
+      "confidence": 44.12,
+      "lift": 1.76
+    },
+    {
+      "antecedents": [
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "Wireless Mouse"
+      ],
+      "support": 15.0,
+      "confidence": 60.0,
+      "lift": 1.76
+    },
+    {
+      "antecedents": [
+        "Laptop"
+      ],
+      "consequents": [
+        "Keyboard",
+        "Wireless Mouse"
+      ],
+      "support": 15.0,
+      "confidence": 33.33,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Keyboard"
+      ],
+      "consequents": [
+        "Laptop",
+        "Wireless Mouse"
+      ],
+      "support": 15.0,
+      "confidence": 68.18,
+      "lift": 2.01
+    },
+    {
+      "antecedents": [
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Keyboard",
+        "Laptop"
+      ],
+      "support": 15.0,
+      "confidence": 44.12,
+      "lift": 2.01
+    },
+    {
+      "antecedents": [
+        "Keyboard",
+        "Laptop"
+      ],
+      "consequents": [
+        "Wireless Mouse"
+      ],
+      "support": 15.0,
+      "confidence": 68.18,
+      "lift": 2.01
+    },
+    {
+      "antecedents": [
+        "Laptop",
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Keyboard"
+      ],
+      "support": 15.0,
+      "confidence": 44.12,
+      "lift": 2.01
+    },
+    {
+      "antecedents": [
+        "Keyboard",
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 15.0,
+      "confidence": 100.0,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Laptop"
+      ],
+      "consequents": [
+        "Keyboard",
+        "Laptop Bag"
+      ],
+      "support": 11.0,
+      "confidence": 24.44,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Keyboard"
+      ],
+      "consequents": [
+        "Laptop",
+        "Laptop Bag"
+      ],
+      "support": 11.0,
+      "confidence": 50.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "Keyboard",
+        "Laptop"
+      ],
+      "support": 11.0,
+      "confidence": 44.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Keyboard",
+        "Laptop"
+      ],
+      "consequents": [
+        "Laptop Bag"
+      ],
+      "support": 11.0,
+      "confidence": 50.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Laptop",
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "Keyboard"
+      ],
+      "support": 11.0,
+      "confidence": 44.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Keyboard",
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 11.0,
+      "confidence": 100.0,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Laptop"
+      ],
+      "consequents": [
+        "Laptop Bag",
+        "Wireless Mouse"
+      ],
+      "support": 15.0,
+      "confidence": 33.33,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Laptop",
+        "Laptop Bag"
+      ],
+      "support": 15.0,
+      "confidence": 44.12,
+      "lift": 1.76
+    },
+    {
+      "antecedents": [
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "Laptop",
+        "Wireless Mouse"
+      ],
+      "support": 15.0,
+      "confidence": 60.0,
+      "lift": 1.76
+    },
+    {
+      "antecedents": [
+        "Laptop",
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Laptop Bag"
+      ],
+      "support": 15.0,
+      "confidence": 44.12,
+      "lift": 1.76
+    },
+    {
+      "antecedents": [
+        "Laptop",
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "Wireless Mouse"
+      ],
+      "support": 15.0,
+      "confidence": 60.0,
+      "lift": 1.76
+    },
+    {
+      "antecedents": [
+        "Laptop Bag",
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 15.0,
+      "confidence": 100.0,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Keyboard"
+      ],
+      "consequents": [
+        "Laptop Bag",
+        "Wireless Mouse"
+      ],
+      "support": 5.0,
+      "confidence": 22.73,
+      "lift": 1.52
+    },
+    {
+      "antecedents": [
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "Keyboard",
+        "Wireless Mouse"
+      ],
+      "support": 5.0,
+      "confidence": 20.0,
+      "lift": 1.33
+    },
+    {
+      "antecedents": [
+        "Keyboard",
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Laptop Bag"
+      ],
+      "support": 5.0,
+      "confidence": 33.33,
+      "lift": 1.33
+    },
+    {
+      "antecedents": [
+        "Keyboard",
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "Wireless Mouse"
+      ],
+      "support": 5.0,
+      "confidence": 45.45,
+      "lift": 1.34
+    },
+    {
+      "antecedents": [
+        "Laptop Bag",
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Keyboard"
+      ],
+      "support": 5.0,
+      "confidence": 33.33,
+      "lift": 1.52
+    },
+    {
+      "antecedents": [
+        "Laptop"
+      ],
+      "consequents": [
+        "USB Hub"
+      ],
+      "support": 12.0,
+      "confidence": 26.67,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "USB Hub"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 12.0,
+      "confidence": 100.0,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "USB Hub"
+      ],
+      "support": 6.0,
+      "confidence": 24.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "USB Hub"
+      ],
+      "consequents": [
+        "Laptop Bag"
+      ],
+      "support": 6.0,
+      "confidence": 50.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "Laptop",
+        "USB Hub"
+      ],
+      "support": 6.0,
+      "confidence": 24.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "USB Hub"
+      ],
+      "consequents": [
+        "Laptop",
+        "Laptop Bag"
+      ],
+      "support": 6.0,
+      "confidence": 50.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Laptop",
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "USB Hub"
+      ],
+      "support": 6.0,
+      "confidence": 24.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Laptop",
+        "USB Hub"
+      ],
+      "consequents": [
+        "Laptop Bag"
+      ],
+      "support": 6.0,
+      "confidence": 50.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Laptop Bag",
+        "USB Hub"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 6.0,
+      "confidence": 100.0,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Smartphone"
+      ],
+      "consequents": [
+        "Phone Case"
+      ],
+      "support": 30.0,
+      "confidence": 73.17,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "Phone Case"
+      ],
+      "consequents": [
+        "Smartphone"
+      ],
+      "support": 30.0,
+      "confidence": 100.0,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "Smartphone"
+      ],
+      "consequents": [
+        "Screen Protector"
+      ],
+      "support": 12.0,
+      "confidence": 29.27,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "Screen Protector"
+      ],
+      "consequents": [
+        "Smartphone"
+      ],
+      "support": 12.0,
+      "confidence": 100.0,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "Smartphone"
+      ],
+      "consequents": [
+        "USB-C Fast Charger"
+      ],
+      "support": 22.0,
+      "confidence": 53.66,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Smartphone"
+      ],
+      "support": 22.0,
+      "confidence": 100.0,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "Phone Case"
+      ],
+      "consequents": [
+        "Screen Protector"
+      ],
+      "support": 10.0,
+      "confidence": 33.33,
+      "lift": 2.78
+    },
+    {
+      "antecedents": [
+        "Screen Protector"
+      ],
+      "consequents": [
+        "Phone Case"
+      ],
+      "support": 10.0,
+      "confidence": 83.33,
+      "lift": 2.78
+    },
+    {
+      "antecedents": [
+        "Phone Case"
+      ],
+      "consequents": [
+        "USB-C Fast Charger"
+      ],
+      "support": 15.0,
+      "confidence": 50.0,
+      "lift": 2.27
+    },
+    {
+      "antecedents": [
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Phone Case"
+      ],
+      "support": 15.0,
+      "confidence": 68.18,
+      "lift": 2.27
+    },
+    {
+      "antecedents": [
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Screen Protector"
+      ],
+      "support": 7.0,
+      "confidence": 31.82,
+      "lift": 2.65
+    },
+    {
+      "antecedents": [
+        "Screen Protector"
+      ],
+      "consequents": [
+        "USB-C Fast Charger"
+      ],
+      "support": 7.0,
+      "confidence": 58.33,
+      "lift": 2.65
+    },
+    {
+      "antecedents": [
+        "Smartphone"
+      ],
+      "consequents": [
+        "Phone Case",
+        "Screen Protector"
+      ],
+      "support": 10.0,
+      "confidence": 24.39,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "Phone Case"
+      ],
+      "consequents": [
+        "Screen Protector",
+        "Smartphone"
+      ],
+      "support": 10.0,
+      "confidence": 33.33,
+      "lift": 2.78
+    },
+    {
+      "antecedents": [
+        "Screen Protector"
+      ],
+      "consequents": [
+        "Phone Case",
+        "Smartphone"
+      ],
+      "support": 10.0,
+      "confidence": 83.33,
+      "lift": 2.78
+    },
+    {
+      "antecedents": [
+        "Phone Case",
+        "Smartphone"
+      ],
+      "consequents": [
+        "Screen Protector"
+      ],
+      "support": 10.0,
+      "confidence": 33.33,
+      "lift": 2.78
+    },
+    {
+      "antecedents": [
+        "Screen Protector",
+        "Smartphone"
+      ],
+      "consequents": [
+        "Phone Case"
+      ],
+      "support": 10.0,
+      "confidence": 83.33,
+      "lift": 2.78
+    },
+    {
+      "antecedents": [
+        "Phone Case",
+        "Screen Protector"
+      ],
+      "consequents": [
+        "Smartphone"
+      ],
+      "support": 10.0,
+      "confidence": 100.0,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "Smartphone"
+      ],
+      "consequents": [
+        "Phone Case",
+        "USB-C Fast Charger"
+      ],
+      "support": 15.0,
+      "confidence": 36.59,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "Phone Case"
+      ],
+      "consequents": [
+        "Smartphone",
+        "USB-C Fast Charger"
+      ],
+      "support": 15.0,
+      "confidence": 50.0,
+      "lift": 2.27
+    },
+    {
+      "antecedents": [
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Phone Case",
+        "Smartphone"
+      ],
+      "support": 15.0,
+      "confidence": 68.18,
+      "lift": 2.27
+    },
+    {
+      "antecedents": [
+        "Phone Case",
+        "Smartphone"
+      ],
+      "consequents": [
+        "USB-C Fast Charger"
+      ],
+      "support": 15.0,
+      "confidence": 50.0,
+      "lift": 2.27
+    },
+    {
+      "antecedents": [
+        "Smartphone",
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Phone Case"
+      ],
+      "support": 15.0,
+      "confidence": 68.18,
+      "lift": 2.27
+    },
+    {
+      "antecedents": [
+        "Phone Case",
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Smartphone"
+      ],
+      "support": 15.0,
+      "confidence": 100.0,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Screen Protector",
+        "Smartphone"
+      ],
+      "support": 7.0,
+      "confidence": 31.82,
+      "lift": 2.65
+    },
+    {
+      "antecedents": [
+        "Screen Protector"
+      ],
+      "consequents": [
+        "Smartphone",
+        "USB-C Fast Charger"
+      ],
+      "support": 7.0,
+      "confidence": 58.33,
+      "lift": 2.65
+    },
+    {
+      "antecedents": [
+        "Smartphone",
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Screen Protector"
+      ],
+      "support": 7.0,
+      "confidence": 31.82,
+      "lift": 2.65
+    },
+    {
+      "antecedents": [
+        "Screen Protector",
+        "Smartphone"
+      ],
+      "consequents": [
+        "USB-C Fast Charger"
+      ],
+      "support": 7.0,
+      "confidence": 58.33,
+      "lift": 2.65
+    },
+    {
+      "antecedents": [
+        "Screen Protector",
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Smartphone"
+      ],
+      "support": 7.0,
+      "confidence": 100.0,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "Screen Protector"
+      ],
+      "consequents": [
+        "Phone Case",
+        "USB-C Fast Charger"
+      ],
+      "support": 5.0,
+      "confidence": 41.67,
+      "lift": 2.78
+    },
+    {
+      "antecedents": [
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Phone Case",
+        "Screen Protector"
+      ],
+      "support": 5.0,
+      "confidence": 22.73,
+      "lift": 2.27
+    },
+    {
+      "antecedents": [
+        "Phone Case",
+        "Screen Protector"
+      ],
+      "consequents": [
+        "USB-C Fast Charger"
+      ],
+      "support": 5.0,
+      "confidence": 50.0,
+      "lift": 2.27
+    },
+    {
+      "antecedents": [
+        "Phone Case",
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Screen Protector"
+      ],
+      "support": 5.0,
+      "confidence": 33.33,
+      "lift": 2.78
+    },
+    {
+      "antecedents": [
+        "Screen Protector",
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Phone Case"
+      ],
+      "support": 5.0,
+      "confidence": 71.43,
+      "lift": 2.38
+    },
+    {
+      "antecedents": [
+        "Smartphone"
+      ],
+      "consequents": [
+        "Wireless Earbuds"
+      ],
+      "support": 13.0,
+      "confidence": 31.71,
+      "lift": 1.44
+    },
+    {
+      "antecedents": [
+        "Wireless Earbuds"
+      ],
+      "consequents": [
+        "Smartphone"
+      ],
+      "support": 13.0,
+      "confidence": 59.09,
+      "lift": 1.44
+    },
+    {
+      "antecedents": [
+        "Phone Case"
+      ],
+      "consequents": [
+        "Wireless Earbuds"
+      ],
+      "support": 8.0,
+      "confidence": 26.67,
+      "lift": 1.21
+    },
+    {
+      "antecedents": [
+        "Wireless Earbuds"
+      ],
+      "consequents": [
+        "Phone Case"
+      ],
+      "support": 8.0,
+      "confidence": 36.36,
+      "lift": 1.21
+    },
+    {
+      "antecedents": [
+        "Phone Case"
+      ],
+      "consequents": [
+        "Smartphone",
+        "Wireless Earbuds"
+      ],
+      "support": 8.0,
+      "confidence": 26.67,
+      "lift": 2.05
+    },
+    {
+      "antecedents": [
+        "Wireless Earbuds"
+      ],
+      "consequents": [
+        "Phone Case",
+        "Smartphone"
+      ],
+      "support": 8.0,
+      "confidence": 36.36,
+      "lift": 1.21
+    },
+    {
+      "antecedents": [
+        "Phone Case",
+        "Smartphone"
+      ],
+      "consequents": [
+        "Wireless Earbuds"
+      ],
+      "support": 8.0,
+      "confidence": 26.67,
+      "lift": 1.21
+    },
+    {
+      "antecedents": [
+        "Smartphone",
+        "Wireless Earbuds"
+      ],
+      "consequents": [
+        "Phone Case"
+      ],
+      "support": 8.0,
+      "confidence": 61.54,
+      "lift": 2.05
+    },
+    {
+      "antecedents": [
+        "Phone Case",
+        "Wireless Earbuds"
+      ],
+      "consequents": [
+        "Smartphone"
+      ],
+      "support": 8.0,
+      "confidence": 100.0,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "Smartphone"
+      ],
+      "consequents": [
+        "Power Bank"
+      ],
+      "support": 19.0,
+      "confidence": 46.34,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "Power Bank"
+      ],
+      "consequents": [
+        "Smartphone"
+      ],
+      "support": 19.0,
+      "confidence": 100.0,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Power Bank"
+      ],
+      "support": 9.0,
+      "confidence": 40.91,
+      "lift": 2.15
+    },
+    {
+      "antecedents": [
+        "Power Bank"
+      ],
+      "consequents": [
+        "USB-C Fast Charger"
+      ],
+      "support": 9.0,
+      "confidence": 47.37,
+      "lift": 2.15
+    },
+    {
+      "antecedents": [
+        "Smartphone"
+      ],
+      "consequents": [
+        "Power Bank",
+        "USB-C Fast Charger"
+      ],
+      "support": 9.0,
+      "confidence": 21.95,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Power Bank",
+        "Smartphone"
+      ],
+      "support": 9.0,
+      "confidence": 40.91,
+      "lift": 2.15
+    },
+    {
+      "antecedents": [
+        "Power Bank"
+      ],
+      "consequents": [
+        "Smartphone",
+        "USB-C Fast Charger"
+      ],
+      "support": 9.0,
+      "confidence": 47.37,
+      "lift": 2.15
+    },
+    {
+      "antecedents": [
+        "Smartphone",
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Power Bank"
+      ],
+      "support": 9.0,
+      "confidence": 40.91,
+      "lift": 2.15
+    },
+    {
+      "antecedents": [
+        "Power Bank",
+        "Smartphone"
+      ],
+      "consequents": [
+        "USB-C Fast Charger"
+      ],
+      "support": 9.0,
+      "confidence": 47.37,
+      "lift": 2.15
+    },
+    {
+      "antecedents": [
+        "Power Bank",
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Smartphone"
+      ],
+      "support": 9.0,
+      "confidence": 100.0,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "Wireless Headphones"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 7.0,
+      "confidence": 53.85,
+      "lift": 1.2
+    },
+    {
+      "antecedents": [
+        "Wireless Headphones"
+      ],
+      "consequents": [
+        "Wireless Mouse"
+      ],
+      "support": 6.0,
+      "confidence": 46.15,
+      "lift": 1.36
+    },
+    {
+      "antecedents": [
+        "Wireless Headphones"
+      ],
+      "consequents": [
+        "Laptop",
+        "Wireless Mouse"
+      ],
+      "support": 6.0,
+      "confidence": 46.15,
+      "lift": 1.36
+    },
+    {
+      "antecedents": [
+        "Laptop",
+        "Wireless Headphones"
+      ],
+      "consequents": [
+        "Wireless Mouse"
+      ],
+      "support": 6.0,
+      "confidence": 85.71,
+      "lift": 2.52
+    },
+    {
+      "antecedents": [
+        "Wireless Headphones",
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 6.0,
+      "confidence": 100.0,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Laptop"
+      ],
+      "consequents": [
+        "Mouse Pad"
+      ],
+      "support": 10.0,
+      "confidence": 22.22,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Mouse Pad"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 10.0,
+      "confidence": 100.0,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Keyboard"
+      ],
+      "consequents": [
+        "Mouse Pad"
+      ],
+      "support": 7.0,
+      "confidence": 31.82,
+      "lift": 3.18
+    },
+    {
+      "antecedents": [
+        "Mouse Pad"
+      ],
+      "consequents": [
+        "Keyboard"
+      ],
+      "support": 7.0,
+      "confidence": 70.0,
+      "lift": 3.18
+    },
+    {
+      "antecedents": [
+        "Mouse Pad"
+      ],
+      "consequents": [
+        "Laptop Bag"
+      ],
+      "support": 5.0,
+      "confidence": 50.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "Mouse Pad"
+      ],
+      "support": 5.0,
+      "confidence": 20.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Keyboard"
+      ],
+      "consequents": [
+        "Laptop",
+        "Mouse Pad"
+      ],
+      "support": 7.0,
+      "confidence": 31.82,
+      "lift": 3.18
+    },
+    {
+      "antecedents": [
+        "Mouse Pad"
+      ],
+      "consequents": [
+        "Keyboard",
+        "Laptop"
+      ],
+      "support": 7.0,
+      "confidence": 70.0,
+      "lift": 3.18
+    },
+    {
+      "antecedents": [
+        "Keyboard",
+        "Laptop"
+      ],
+      "consequents": [
+        "Mouse Pad"
+      ],
+      "support": 7.0,
+      "confidence": 31.82,
+      "lift": 3.18
+    },
+    {
+      "antecedents": [
+        "Laptop",
+        "Mouse Pad"
+      ],
+      "consequents": [
+        "Keyboard"
+      ],
+      "support": 7.0,
+      "confidence": 70.0,
+      "lift": 3.18
+    },
+    {
+      "antecedents": [
+        "Keyboard",
+        "Mouse Pad"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 7.0,
+      "confidence": 100.0,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Mouse Pad"
+      ],
+      "consequents": [
+        "Laptop",
+        "Laptop Bag"
+      ],
+      "support": 5.0,
+      "confidence": 50.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "Laptop",
+        "Mouse Pad"
+      ],
+      "support": 5.0,
+      "confidence": 20.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Laptop",
+        "Mouse Pad"
+      ],
+      "consequents": [
+        "Laptop Bag"
+      ],
+      "support": 5.0,
+      "confidence": 50.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Laptop",
+        "Laptop Bag"
+      ],
+      "consequents": [
+        "Mouse Pad"
+      ],
+      "support": 5.0,
+      "confidence": 20.0,
+      "lift": 2.0
+    },
+    {
+      "antecedents": [
+        "Laptop Bag",
+        "Mouse Pad"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 5.0,
+      "confidence": 100.0,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Wireless Earbuds"
+      ],
+      "consequents": [
+        "Power Bank"
+      ],
+      "support": 6.0,
+      "confidence": 27.27,
+      "lift": 1.44
+    },
+    {
+      "antecedents": [
+        "Power Bank"
+      ],
+      "consequents": [
+        "Wireless Earbuds"
+      ],
+      "support": 6.0,
+      "confidence": 31.58,
+      "lift": 1.44
+    },
+    {
+      "antecedents": [
+        "Wireless Earbuds"
+      ],
+      "consequents": [
+        "Power Bank",
+        "Smartphone"
+      ],
+      "support": 6.0,
+      "confidence": 27.27,
+      "lift": 1.44
+    },
+    {
+      "antecedents": [
+        "Power Bank"
+      ],
+      "consequents": [
+        "Smartphone",
+        "Wireless Earbuds"
+      ],
+      "support": 6.0,
+      "confidence": 31.58,
+      "lift": 2.43
+    },
+    {
+      "antecedents": [
+        "Smartphone",
+        "Wireless Earbuds"
+      ],
+      "consequents": [
+        "Power Bank"
+      ],
+      "support": 6.0,
+      "confidence": 46.15,
+      "lift": 2.43
+    },
+    {
+      "antecedents": [
+        "Power Bank",
+        "Smartphone"
+      ],
+      "consequents": [
+        "Wireless Earbuds"
+      ],
+      "support": 6.0,
+      "confidence": 31.58,
+      "lift": 1.44
+    },
+    {
+      "antecedents": [
+        "Power Bank",
+        "Wireless Earbuds"
+      ],
+      "consequents": [
+        "Smartphone"
+      ],
+      "support": 6.0,
+      "confidence": 100.0,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "USB Hub"
+      ],
+      "support": 9.0,
+      "confidence": 26.47,
+      "lift": 2.21
+    },
+    {
+      "antecedents": [
+        "USB Hub"
+      ],
+      "consequents": [
+        "Wireless Mouse"
+      ],
+      "support": 9.0,
+      "confidence": 75.0,
+      "lift": 2.21
+    },
+    {
+      "antecedents": [
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Laptop",
+        "USB Hub"
+      ],
+      "support": 9.0,
+      "confidence": 26.47,
+      "lift": 2.21
+    },
+    {
+      "antecedents": [
+        "USB Hub"
+      ],
+      "consequents": [
+        "Laptop",
+        "Wireless Mouse"
+      ],
+      "support": 9.0,
+      "confidence": 75.0,
+      "lift": 2.21
+    },
+    {
+      "antecedents": [
+        "Laptop",
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "USB Hub"
+      ],
+      "support": 9.0,
+      "confidence": 26.47,
+      "lift": 2.21
+    },
+    {
+      "antecedents": [
+        "Laptop",
+        "USB Hub"
+      ],
+      "consequents": [
+        "Wireless Mouse"
+      ],
+      "support": 9.0,
+      "confidence": 75.0,
+      "lift": 2.21
+    },
+    {
+      "antecedents": [
+        "USB Hub",
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 9.0,
+      "confidence": 100.0,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Phone Case"
+      ],
+      "consequents": [
+        "Power Bank"
+      ],
+      "support": 11.0,
+      "confidence": 36.67,
+      "lift": 1.93
+    },
+    {
+      "antecedents": [
+        "Power Bank"
+      ],
+      "consequents": [
+        "Phone Case"
+      ],
+      "support": 11.0,
+      "confidence": 57.89,
+      "lift": 1.93
+    },
+    {
+      "antecedents": [
+        "Smartphone"
+      ],
+      "consequents": [
+        "Phone Case",
+        "Power Bank"
+      ],
+      "support": 11.0,
+      "confidence": 26.83,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "Phone Case"
+      ],
+      "consequents": [
+        "Power Bank",
+        "Smartphone"
+      ],
+      "support": 11.0,
+      "confidence": 36.67,
+      "lift": 1.93
+    },
+    {
+      "antecedents": [
+        "Power Bank"
+      ],
+      "consequents": [
+        "Phone Case",
+        "Smartphone"
+      ],
+      "support": 11.0,
+      "confidence": 57.89,
+      "lift": 1.93
+    },
+    {
+      "antecedents": [
+        "Phone Case",
+        "Smartphone"
+      ],
+      "consequents": [
+        "Power Bank"
+      ],
+      "support": 11.0,
+      "confidence": 36.67,
+      "lift": 1.93
+    },
+    {
+      "antecedents": [
+        "Power Bank",
+        "Smartphone"
+      ],
+      "consequents": [
+        "Phone Case"
+      ],
+      "support": 11.0,
+      "confidence": 57.89,
+      "lift": 1.93
+    },
+    {
+      "antecedents": [
+        "Phone Case",
+        "Power Bank"
+      ],
+      "consequents": [
+        "Smartphone"
+      ],
+      "support": 11.0,
+      "confidence": 100.0,
+      "lift": 2.44
+    },
+    {
+      "antecedents": [
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Phone Case",
+        "Power Bank"
+      ],
+      "support": 5.0,
+      "confidence": 22.73,
+      "lift": 2.07
+    },
+    {
+      "antecedents": [
+        "Power Bank"
+      ],
+      "consequents": [
+        "Phone Case",
+        "USB-C Fast Charger"
+      ],
+      "support": 5.0,
+      "confidence": 26.32,
+      "lift": 1.75
+    },
+    {
+      "antecedents": [
+        "Phone Case",
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Power Bank"
+      ],
+      "support": 5.0,
+      "confidence": 33.33,
+      "lift": 1.75
+    },
+    {
+      "antecedents": [
+        "Phone Case",
+        "Power Bank"
+      ],
+      "consequents": [
+        "USB-C Fast Charger"
+      ],
+      "support": 5.0,
+      "confidence": 45.45,
+      "lift": 2.07
+    },
+    {
+      "antecedents": [
+        "Power Bank",
+        "USB-C Fast Charger"
+      ],
+      "consequents": [
+        "Phone Case"
+      ],
+      "support": 5.0,
+      "confidence": 55.56,
+      "lift": 1.85
+    },
+    {
+      "antecedents": [
+        "Smart Watch"
+      ],
+      "consequents": [
+        "Bluetooth Speaker"
+      ],
+      "support": 8.0,
+      "confidence": 100.0,
+      "lift": 7.14
+    },
+    {
+      "antecedents": [
+        "Bluetooth Speaker"
+      ],
+      "consequents": [
+        "Smart Watch"
+      ],
+      "support": 8.0,
+      "confidence": 57.14,
+      "lift": 7.14
+    },
+    {
+      "antecedents": [
+        "Wireless Headphones"
+      ],
+      "consequents": [
+        "Bluetooth Speaker"
+      ],
+      "support": 6.0,
+      "confidence": 46.15,
+      "lift": 3.3
+    },
+    {
+      "antecedents": [
+        "Bluetooth Speaker"
+      ],
+      "consequents": [
+        "Wireless Headphones"
+      ],
+      "support": 6.0,
+      "confidence": 42.86,
+      "lift": 3.3
+    },
+    {
+      "antecedents": [
+        "Mouse Pad"
+      ],
+      "consequents": [
+        "Wireless Mouse"
+      ],
+      "support": 5.0,
+      "confidence": 50.0,
+      "lift": 1.47
+    },
+    {
+      "antecedents": [
+        "Mouse Pad"
+      ],
+      "consequents": [
+        "Laptop",
+        "Wireless Mouse"
+      ],
+      "support": 5.0,
+      "confidence": 50.0,
+      "lift": 1.47
+    },
+    {
+      "antecedents": [
+        "Laptop",
+        "Mouse Pad"
+      ],
+      "consequents": [
+        "Wireless Mouse"
+      ],
+      "support": 5.0,
+      "confidence": 50.0,
+      "lift": 1.47
+    },
+    {
+      "antecedents": [
+        "Mouse Pad",
+        "Wireless Mouse"
+      ],
+      "consequents": [
+        "Laptop"
+      ],
+      "support": 5.0,
+      "confidence": 100.0,
+      "lift": 2.22
+    },
+    {
+      "antecedents": [
+        "Smart Watch"
+      ],
+      "consequents": [
+        "Wireless Earbuds"
+      ],
+      "support": 5.0,
+      "confidence": 62.5,
+      "lift": 2.84
+    },
+    {
+      "antecedents": [
+        "Wireless Earbuds"
+      ],
+      "consequents": [
+        "Smart Watch"
+      ],
+      "support": 5.0,
+      "confidence": 22.73,
+      "lift": 2.84
+    },
+    {
+      "antecedents": [
+        "Wireless Earbuds"
+      ],
+      "consequents": [
+        "Bluetooth Speaker"
+      ],
+      "support": 9.0,
+      "confidence": 40.91,
+      "lift": 2.92
+    },
+    {
+      "antecedents": [
+        "Bluetooth Speaker"
+      ],
+      "consequents": [
+        "Wireless Earbuds"
+      ],
+      "support": 9.0,
+      "confidence": 64.29,
+      "lift": 2.92
+    },
+    {
+      "antecedents": [
+        "Smart Watch"
+      ],
+      "consequents": [
+        "Bluetooth Speaker",
+        "Wireless Earbuds"
+      ],
+      "support": 5.0,
+      "confidence": 62.5,
+      "lift": 6.94
+    },
+    {
+      "antecedents": [
+        "Wireless Earbuds"
+      ],
+      "consequents": [
+        "Bluetooth Speaker",
+        "Smart Watch"
+      ],
+      "support": 5.0,
+      "confidence": 22.73,
+      "lift": 2.84
+    },
+    {
+      "antecedents": [
+        "Bluetooth Speaker"
+      ],
+      "consequents": [
+        "Smart Watch",
+        "Wireless Earbuds"
+      ],
+      "support": 5.0,
+      "confidence": 35.71,
+      "lift": 7.14
+    },
+    {
+      "antecedents": [
+        "Smart Watch",
+        "Wireless Earbuds"
+      ],
+      "consequents": [
+        "Bluetooth Speaker"
+      ],
+      "support": 5.0,
+      "confidence": 100.0,
+      "lift": 7.14
+    },
+    {
+      "antecedents": [
+        "Bluetooth Speaker",
+        "Smart Watch"
+      ],
+      "consequents": [
+        "Wireless Earbuds"
+      ],
+      "support": 5.0,
+      "confidence": 62.5,
+      "lift": 2.84
+    },
+    {
+      "antecedents": [
+        "Bluetooth Speaker",
+        "Wireless Earbuds"
+      ],
+      "consequents": [
+        "Smart Watch"
+      ],
+      "support": 5.0,
+      "confidence": 55.56,
+      "lift": 6.94
+    }
+  ]
+}

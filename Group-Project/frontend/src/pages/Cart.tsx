@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import ProductImage from "../components/ProductImage";
+import { placeOrder } from "../services/api";
 
 export default function Cart() {
   const { items, updateQuantity, removeFromCart, clearCart, totalPrice } =
@@ -28,31 +29,20 @@ export default function Cart() {
     setPlacing(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: user.id,
-          items: items.map((item) => ({
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity,
-          })),
-          total: grandTotal,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Could not place order.");
-        return;
-      }
+      await placeOrder(
+        user.id,
+        items.map((item) => ({
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+        grandTotal
+      );
 
       setPlaced(true);
       clearCart();
-    } catch {
-      setError("Could not reach the server. Is the backend running?");
+    } catch (err: any) {
+      setError(err.message || "Could not place order.");
     } finally {
       setPlacing(false);
     }

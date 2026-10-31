@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd Group-Project/frontend && npm install && npm run build",
+  "outputDirectory": "Group-Project/frontend/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

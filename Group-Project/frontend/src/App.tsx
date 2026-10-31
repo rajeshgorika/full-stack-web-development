@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import ProductDetails from "./pages/ProductDetails";
@@ -12,51 +12,16 @@ import RequireAuth from "./components/RequireAuth";
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/recommendations" element={<Recommendations />} />
+        <Route path="/admin" element={<AdminDashboard />} />
 
-        <Route
-          path="/"
-          element={
-            <RequireAuth>
-              <Landing />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <RequireAuth>
-              <Dashboard />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/product/:id"
-          element={
-            <RequireAuth>
-              <ProductDetails />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/recommendations"
-          element={
-            <RequireAuth>
-              <Recommendations />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            <RequireAuth>
-              <AdminDashboard />
-            </RequireAuth>
-          }
-        />
         <Route
           path="/cart"
           element={
@@ -74,7 +39,7 @@ function App() {
           }
         />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

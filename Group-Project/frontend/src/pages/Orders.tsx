@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../context/AuthContext";
+import { fetchUserOrders, type UserOrder } from "../services/api";
 
 interface OrderItem {
   name: string;
@@ -26,10 +27,9 @@ export default function Orders() {
   useEffect(() => {
     if (!user) return;
 
-    fetch(`http://127.0.0.1:5000/api/orders/${user.id}`)
-      .then((res) => res.json())
+    fetchUserOrders(user.id)
       .then((data) => setOrders(data))
-      .catch(() => setError("Could not load your orders. Is the backend running?"))
+      .catch(() => setError("Could not load your orders."))
       .finally(() => setLoading(false));
   }, [user]);
 

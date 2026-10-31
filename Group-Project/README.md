@@ -2,6 +2,8 @@
 
 > Intelligent Full-Stack E-Commerce Recommendation Web Application powered by **React, TypeScript (Vite)**, **Flask**, **MongoDB**, and **Apriori Association Rule Mining (mlxtend)**.
 
+🌐 **Live Deployed Site**: [https://rajeshgorika.github.io/full-stack-web-development/](https://rajeshgorika.github.io/full-stack-web-development/)
+
 ---
 
 ## 🌟 Overview

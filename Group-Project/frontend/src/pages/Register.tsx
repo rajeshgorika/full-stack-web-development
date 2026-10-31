@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { registerUser } from "../services/api";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -41,23 +42,11 @@ export default function Register() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Registration failed.");
-        return;
-      }
-
+      await registerUser(name, email, password);
       setSuccess(true);
       setTimeout(() => navigate("/login"), 1200);
-    } catch {
-      setError("Could not reach the server. Is the backend running?");
+    } catch (err: any) {
+      setError(err.message || "Registration failed.");
     } finally {
       setLoading(false);
     }

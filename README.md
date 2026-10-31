@@ -80,6 +80,7 @@ Contains official laboratory electronic records (E-Records) with finalized pract
 
 ### 4. `Group-Project/`
 - **RecoAI – E-Commerce Recommendation Engine**: Full-stack application combining a modern React + TypeScript (Vite) frontend with a Python Flask REST API, MongoDB storage, and Apriori Association Rule Mining (`mlxtend`) to deliver real-time product recommendations based on market basket analysis.
+  - 🌐 **Live Deployed Site**: [https://rajeshgorika.github.io/full-stack-web-development/](https://rajeshgorika.github.io/full-stack-web-development/)
 
 ---
 

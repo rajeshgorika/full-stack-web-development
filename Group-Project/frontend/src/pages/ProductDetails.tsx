@@ -8,6 +8,7 @@ import ProductImage from "../components/ProductImage";
 import RecommendationCard, {
   type RecommendationData,
 } from "../components/RecommendationCard";
+import { fetchProductRecommendations } from "../services/api";
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -27,8 +28,7 @@ export default function ProductDetails() {
     if (!id) return;
 
     setLoading(true);
-    fetch(`http://127.0.0.1:5000/api/recommendations/${id}`)
-      .then((res) => res.json())
+    fetchProductRecommendations(id)
       .then((data) => setRecommendations(data.recommendations ?? []))
       .catch(() => setRecommendations([]))
       .finally(() => setLoading(false));

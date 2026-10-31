@@ -4,6 +4,7 @@ import { PRODUCTS } from "../data/products";
 import RecommendationCard, {
   type RecommendationData,
 } from "../components/RecommendationCard";
+import { fetchProductRecommendations } from "../services/api";
 
 export default function Recommendations() {
   const [selectedProduct, setSelectedProduct] = useState(PRODUCTS[0].id);
@@ -20,20 +21,11 @@ export default function Recommendations() {
       setLoading(true);
       setError("");
 
-      const response = await fetch(
-        `http://127.0.0.1:5000/api/recommendations/${productId}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch recommendations");
-      }
-
-      const data = await response.json();
-
-      setRecommendations(data.recommendations);
-    } catch (error) {
-      console.error(error);
-      setError("Unable to connect to the recommendation server.");
+      const data = await fetchProductRecommendations(productId);
+      setRecommendations(data.recommendations || []);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to load recommendations.");
     } finally {
       setLoading(false);
     }
